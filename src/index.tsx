@@ -43,7 +43,7 @@ Promise.all(promises).then(results => {
 		SourcebookLogic.updateSourcebook(sourcebook);
 	});
 
-	[ SourcebookData.core, SourcebookData.orden, ...sourcebooks ].forEach(sourcebook => {
+	[ SourcebookData.core, ...sourcebooks ].forEach(sourcebook => {
 		sourcebook.items.forEach(item => {
 			if (item.crafting) {
 				item.crafting.id = `${item.id}-crafting`;

@@ -1,0 +1,10 @@
+.ability-panel {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+
+	&.disabled {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+}

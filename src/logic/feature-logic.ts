@@ -56,16 +56,6 @@ export class FeatureLogic {
 			}
 		});
 
-		heroClass.subclasses
-			.filter(sc => sc.selected)
-			.forEach(sc => {
-				sc.featuresByLevel.forEach(lvl => {
-					if (lvl.level <= classLevel) {
-						features.push(...lvl.features);
-					}
-				});
-			});
-
 		return FeatureLogic.simplifyFeatures(features, hero);
 	};
 

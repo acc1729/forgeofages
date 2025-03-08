@@ -1,6 +1,6 @@
 import { Ability, AbilityDistance, AbilityType } from '../models/ability';
 import { Encounter, EncounterGroup, EncounterSlot } from '../models/encounter';
-import { Feature, FeatureAbility, FeatureAbilityCost, FeatureAbilityData, FeatureAddOn, FeatureAddOnType, FeatureAncestryChoice, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureChoice, FeatureClassAbility, FeatureCompanion, FeatureDamageModifier, FeatureDomain, FeatureDomainFeature, FeatureItemChoice, FeatureKit, FeatureKitType, FeatureLanguage, FeatureLanguageChoice, FeatureMalice, FeatureMultiple, FeaturePackage, FeaturePerk, FeatureSize, FeatureSkill, FeatureSkillChoice, FeatureSpeed, FeatureText, FeatureTitleChoice } from '../models/feature';
+import { Feature, FeatureAbility, FeatureAbilityCost, FeatureAbilityData, FeatureAddOn, FeatureAddOnType, FeatureAncestryChoice, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureChoice, FeatureClassAbility, FeatureClassTalent, FeatureCompanion, FeatureDamageModifier, FeatureDomain, FeatureDomainFeature, FeatureItemChoice, FeatureKit, FeatureKitType, FeatureLanguage, FeatureLanguageChoice, FeatureMalice, FeatureMultiple, FeaturePackage, FeaturePerk, FeatureSize, FeatureSkill, FeatureSkillChoice, FeatureSpeed, FeatureTalent, FeatureText, FeatureTitleChoice } from '../models/feature';
 import { Kit, KitDamageBonus } from '../models/kit';
 import { Monster, MonsterGroup, MonsterRole } from '../models/monster';
 import { Montage, MontageChallenge, MontageSection } from '../models/montage';
@@ -26,6 +26,7 @@ import { Hero } from '../models/hero';
 import { HeroClass } from '../models/class';
 import { Item } from '../models/item';
 import { ItemType } from '../enums/item-type';
+import { Tier } from '../enums/tier';
 import { KitArmor } from '../enums/kit-armor';
 import { KitType } from '../enums/kit-type';
 import { KitWeapon } from '../enums/kit-weapon';
@@ -43,6 +44,7 @@ import { Size } from '../models/size';
 import { SkillList } from '../enums/skill-list';
 import { Sourcebook } from '../models/sourcebook';
 import { SubClass } from '../models/subclass';
+import { Talent } from '../models/talent';
 import { Title } from '../models/title';
 import { Utils } from '../utils/utils';
 
@@ -164,13 +166,10 @@ export class FactoryLogic {
 			id: Utils.guid(),
 			name: '',
 			description: '',
-			heroicResource: '',
-			subclassName: '',
-			subclassCount: 1,
 			primaryCharacteristics: [],
 			featuresByLevel: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ].map(n => ({ level: n, features: [] })),
 			abilities: [],
-			subclasses: [],
+			talents: [],
 			level: 1,
 			characteristics: []
 		};
@@ -920,6 +919,21 @@ export class FactoryLogic {
 				}
 			};
 		},
+		createClassTalentChoice: (data: { id: string, name?: string, description?: string, count?: number, tier?: Tier }): FeatureClassTalent => {
+			const count = data.count || 1;
+			const tier = data.tier || Tier.Adventurer;
+			return {
+				id: data.id,
+				name: data.name || 'Talent',
+				description: data.description || '',
+				type: FeatureType.ClassTalent,
+				data: {
+					count: count,
+					tier: tier,
+					selectedIDs: []
+				}
+			};
+		},
 		createCompanion: (data: {id: string, name?: string, description?: string, type: 'companion' | 'mount' | 'retainer' }): FeatureCompanion => {
 			return {
 				id: data.id,
@@ -1156,6 +1170,17 @@ export class FactoryLogic {
 				type: FeatureType.Speed,
 				data: {
 					speed: data.speed
+				}
+			};
+		},
+		createTalent: (data: { id: string, name: string, description: string, talent: Talent }): FeatureTalent => {
+			return {
+				id: data.id,
+				name: data.name,
+				description: data.description,
+				type: FeatureType.Talent,
+				data: {
+					talent: data.talent,
 				}
 			};
 		},

@@ -116,21 +116,11 @@ export const HeroEditPage = (props: Props) => {
 						if (hero.class.characteristics.every(ch => ch.value === 0)) {
 							return PageState.InProgress;
 						}
-						if (hero.class.subclasses.filter(sc => sc.selected).length < hero.class.subclassCount) {
-							return PageState.InProgress;
-						}
 						const level = hero.class.level;
 						const features: Feature[] = [];
 						hero.class.featuresByLevel
 							.filter(lvl => lvl.level <= level)
 							.forEach(lvl => features.push(...lvl.features));
-						hero.class.subclasses
-							.filter(sc => sc.selected)
-							.forEach(sc => {
-								sc.featuresByLevel
-									.filter(lvl => lvl.level <= level)
-									.forEach(lvl => features.push(...lvl.features));
-							});
 						return (features.filter(f => FeatureLogic.isChoice(f)).filter(f => !FeatureLogic.isChosen(f)).length > 0) ? PageState.InProgress : PageState.Completed;
 					} else {
 						return PageState.NotStarted;
@@ -290,15 +280,6 @@ export const HeroEditPage = (props: Props) => {
 			setDirty(true);
 		};
 
-		const setSubclasses = (subclassIDs: string[]) => {
-			const heroCopy = Utils.copy(hero);
-			if (heroCopy.class) {
-				heroCopy.class.subclasses.forEach(sc => sc.selected = subclassIDs.includes(sc.id));
-			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
 		const setComplication = (complication: Complication | null) => {
 			const complicationCopy = Utils.copy(complication) as Complication | null;
 			const heroCopy = Utils.copy(hero);
@@ -426,7 +407,6 @@ export const HeroEditPage = (props: Props) => {
 							selectClass={setClass}
 							setLevel={setLevel}
 							selectCharacteristics={setCharacteristics}
-							selectSubclasses={setSubclasses}
 							setFeatureData={setFeatureData}
 						/>
 					);
@@ -832,7 +812,6 @@ interface ClassSectionProps {
 	selectClass: (heroClass: HeroClass | null) => void;
 	setLevel: (level: number) => void;
 	selectCharacteristics: (array: { characteristic: Characteristic, value: number }[]) => void;
-	selectSubclasses: (subclassIDs: string[]) => void;
 	setFeatureData: (featureID: string, data: FeatureData) => void;
 }
 
@@ -844,7 +823,7 @@ const ClassSection = (props: ClassSectionProps) => {
 			.filter(ch => !cls.primaryCharacteristics.includes(ch.characteristic))
 			.map(ch => ch.value)
 			.join(', ');
-		currentArray = HeroLogic.getCharacteristicArrays(cls.primaryCharacteristics.length)
+		currentArray = HeroLogic.getCharacteristicArrays()
 			.find(arr => Collections.getPermutations(arr).map(a => a.join(', ')).includes(str)) || null;
 	}
 	const [ array, setArray ] = useState<number[] | null>(currentArray);
@@ -867,34 +846,9 @@ const ClassSection = (props: ClassSectionProps) => {
 					</SelectablePanel>
 				));
 
-			//#region Choose subclass
-
-			if (props.hero.class.subclasses.length > 0) {
-				choices.unshift(
-					<SelectablePanel key='subclass'>
-						<HeaderText>{props.hero.class.subclassName}</HeaderText>
-						<div className='ds-text'>Choose {props.hero.class.subclassCount === 1 ? `a ${props.hero.class.subclassName}` : `${props.hero.class.subclassCount} ${props.hero.class.subclassName}s`}.</div>
-						<Select
-							style={{ width: '100%' }}
-							className={props.hero.class.subclasses.filter(sc => sc.selected).length === 0 ? 'selection-empty' : ''}
-							mode={props.hero.class.subclassCount === 1 ? undefined : 'multiple'}
-							maxCount={props.hero.class.subclassCount === 1 ? undefined : props.hero.class.subclassCount}
-							allowClear={true}
-							placeholder='Select'
-							options={props.hero.class.subclasses.map(s => ({ value: s.id, label: s.name, desc: s.description }))}
-							optionRender={option => <Field label={option.data.label} value={option.data.desc} />}
-							value={props.hero.class.subclasses.filter(sc => sc.selected).map(sc => sc.id)}
-							onChange={props.selectSubclasses}
-						/>
-					</SelectablePanel>
-				);
-			}
-
-			//#endregion
-
 			//#region Choose characteristics
 
-			const arrays = HeroLogic.getCharacteristicArrays(props.hero.class.primaryCharacteristics.length);
+			const arrays = HeroLogic.getCharacteristicArrays();
 			choices.unshift(
 				<SelectablePanel key='characteristics'>
 					<HeaderText>Characteristics</HeaderText>
@@ -914,11 +868,12 @@ const ClassSection = (props: ClassSectionProps) => {
 						array ?
 							<div>
 								<div className='characteristic-row' style={{ margin: '5px 15px', fontWeight: 600 }}>
-									<div className='characteristic-item characteristic-heading'>M</div>
-									<div className='characteristic-item characteristic-heading'>A</div>
-									<div className='characteristic-item characteristic-heading'>R</div>
-									<div className='characteristic-item characteristic-heading'>I</div>
-									<div className='characteristic-item characteristic-heading'>P</div>
+									<div className='characteristic-item characteristic-heading'>STR</div>
+									<div className='characteristic-item characteristic-heading'>CON</div>
+									<div className='characteristic-item characteristic-heading'>DEX</div>
+									<div className='characteristic-item characteristic-heading'>INT</div>
+									<div className='characteristic-item characteristic-heading'>WIS</div>
+									<div className='characteristic-item characteristic-heading'>CHA</div>
 								</div>
 								<Radio.Group
 									style={{ width: '100%' }}

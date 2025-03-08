@@ -1,5 +1,5 @@
 import { Alert, Button, Drawer, Input, Select, Space } from 'antd';
-import { Feature, FeatureAbilityCostData, FeatureAncestryChoiceData, FeatureAncestryFeatureChoiceData, FeatureBonusData, FeatureCharacteristicBonusData, FeatureChoiceData, FeatureClassAbilityData, FeatureCompanionData, FeatureDamageModifierData, FeatureData, FeatureDomainData, FeatureDomainFeatureData, FeatureItemChoiceData, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureMaliceData, FeatureMultipleData, FeaturePerkData, FeatureSizeData, FeatureSkillChoiceData, FeatureSkillData, FeatureSpeedData, FeatureTitleChoiceData } from '../../../../models/feature';
+import { Feature, FeatureAbilityCostData, FeatureAncestryChoiceData, FeatureAncestryFeatureChoiceData, FeatureBonusData, FeatureCharacteristicBonusData, FeatureChoiceData, FeatureClassAbilityData, FeatureClassTalentData, FeatureCompanionData, FeatureDamageModifierData, FeatureData, FeatureDomainData, FeatureDomainFeatureData, FeatureItemChoiceData, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureMaliceData, FeatureMultipleData, FeaturePerkData, FeatureSizeData, FeatureSkillChoiceData, FeatureSkillData, FeatureSpeedData, FeatureTitleChoiceData } from '../../../../models/feature';
 import { Ability } from '../../../../models/ability';
 import { AbilityPanel } from '../ability-panel/ability-panel';
 import { Ancestry } from '../../../../models/ancestry';
@@ -31,6 +31,8 @@ import { PerkPanel } from '../perk-panel/perk-panel';
 import { PowerRollPanel } from '../../power-roll/power-roll-panel';
 import { Sourcebook } from '../../../../models/sourcebook';
 import { SourcebookLogic } from '../../../../logic/sourcebook-logic';
+import { Talent } from '../../../../models/talent';
+import { TalentPanel } from '../talent-panel/talent-panel';
 import { ThunderboltOutlined } from '@ant-design/icons';
 import { TitlePanel } from '../title-panel/title-panel';
 import { Utils } from '../../../../utils/utils';
@@ -316,6 +318,71 @@ export const FeaturePanel = (props: Props) => {
 						const ability = abilities.find(a => a.id === id) as Ability;
 						return (
 							<AbilityPanel key={ability.id} ability={ability} mode={PanelMode.Full} />
+						);
+					})
+				}
+			</Space>
+		);
+	};
+
+	const getSelectionClassTalent = (data: FeatureClassTalentData) => {
+		if (!props.hero) {
+			return null;
+		}
+
+		const currentTalentIDs = HeroLogic.getFeatures(props.hero)
+			.filter(f => f.id !== props.feature.id)
+			.filter(f => f.type === FeatureType.ClassTalent)
+			.flatMap(f => f.data.selectedIDs);
+
+		const talents = props.hero?.class?.talents || [];
+			// .filter(a => a.cost === data.cost)
+			// .filter(a => a.minLevel <= data.minLevel) || [];
+
+		const distinctTalents = Collections.distinct(talents, a => a.name);
+		const sortedTalents = Collections.sort(distinctTalents, a => a.name);
+
+		if (sortedTalents.length === 0) {
+			return (
+				<Alert
+					type='warning'
+					showIcon={true}
+					message='There are no options to choose for this feature.'
+				/>
+			);
+		}
+
+		return (
+			<Space direction='vertical' style={{ width: '100%' }}>
+				<Select
+					style={{ width: '100%' }}
+					className={data.selectedIDs.length === 0 ? 'selection-empty' : ''}
+					mode={data.count === 1 ? undefined : 'multiple'}
+					maxCount={data.count === 1 ? undefined : data.count}
+					allowClear={true}
+					placeholder={data.count === 1 ? 'Select a talent' : 'Select talents'}
+					options={sortedTalents.map(a => ({ label: a.name, value: a.id, desc: a.description, disabled: currentTalentIDs.includes(a.id) }))}
+					optionRender={option => <Field disabled={option.data.disabled} label={option.data.label} value={option.data.desc} />}
+					value={data.count === 1 ? (data.selectedIDs.length > 0 ? data.selectedIDs[0] : null) : data.selectedIDs}
+					onChange={value => {
+						let ids: string[] = [];
+						if (data.count === 1) {
+							ids = value !== undefined ? [ value as string ] : [];
+						} else {
+							ids = value as string[];
+						}
+						const dataCopy = Utils.copy(data);
+						dataCopy.selectedIDs = ids;
+						if (props.setData) {
+							props.setData(props.feature.id, dataCopy);
+						}
+					}}
+				/>
+				{
+					data.selectedIDs.map(id => {
+						const talent = talents.find(a => a.id === id) as Talent;
+						return (
+							<TalentPanel key={talent.id} talent={talent} mode={PanelMode.Full} />
 						);
 					})
 				}
@@ -988,6 +1055,8 @@ export const FeaturePanel = (props: Props) => {
 				return getSelectionChoice(props.feature.data);
 			case FeatureType.ClassAbility:
 				return getSelectionClassAbility(props.feature.data);
+			case FeatureType.ClassTalent:
+				return getSelectionClassTalent(props.feature.data);
 			case FeatureType.Companion:
 				return getSelectionCompanion(props.feature.data);
 			case FeatureType.Domain:

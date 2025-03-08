@@ -159,11 +159,6 @@ export const HeroPanel = (props: Props) => {
 							<HeaderText>Class</HeaderText>
 							<Field label='Class' value={props.hero.class.name} />
 							<Field label='Level' value={props.hero.class.level} />
-							{
-								props.hero.class.subclasses.filter(sc => sc.selected).length > 0 ?
-									<Field label={props.hero.class.subclassName} value={props.hero.class.subclasses.filter(sc => sc.selected).map(sc => sc.name).join(', ') || ''} />
-									: null
-							}
 						</div>
 						:
 						<div className='overview-tile'>
@@ -502,7 +497,6 @@ export const HeroPanel = (props: Props) => {
 
 	try {
 		if (props.mode !== PanelMode.Full) {
-			const subclasses = props.hero.class?.subclasses.filter(sc => sc.selected);
 			const domains = HeroLogic.getDomains(props.hero);
 			const kits = HeroLogic.getKits(props.hero);
 
@@ -512,7 +506,6 @@ export const HeroPanel = (props: Props) => {
 					<Field label='Ancestry' value={props.hero.ancestry?.name || 'No ancestry'} />
 					<Field label='Career' value={props.hero.career?.name || 'No career'} />
 					<Field label='Class' value={props.hero.class?.name || 'No class'} />
-					{subclasses ? <Field label={props.hero.class?.subclassName || 'Subclass'} value={subclasses.map(sc => sc.name).join(', ')} /> : null}
 					{props.hero.class ? <Field label='Level' value={props.hero.class.level} /> : null}
 					{domains.length > 0 ? <Field label='Domain' value={domains.map(d => d.name).join(', ')} /> : null}
 					{kits.length > 0 ? <Field label='Kit' value={kits.map(k => k.name).join(', ')} /> : null}

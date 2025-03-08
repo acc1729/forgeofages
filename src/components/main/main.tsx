@@ -131,7 +131,6 @@ export const Main = (props: Props) => {
 	const createHero = () => {
 		const hero = FactoryLogic.createHero([
 			SourcebookData.core.id,
-			SourcebookData.orden.id
 		]);
 
 		setDrawer(null);
@@ -899,7 +898,7 @@ export const Main = (props: Props) => {
 		setDrawer(
 			<HeroStateModal
 				hero={hero}
-				sourcebooks={[ SourcebookData.core, SourcebookData.orden, ...homebrewSourcebooks ]}
+				sourcebooks={[ SourcebookData.core, ...homebrewSourcebooks ]}
 				startPage={page}
 				onClose={() => setDrawer(null)}
 				onChange={persistHero}
@@ -918,7 +917,7 @@ export const Main = (props: Props) => {
 		setDrawer(
 			<RulesModal
 				hero={hero}
-				sourcebooks={[ SourcebookData.core, SourcebookData.orden, ...homebrewSourcebooks ]}
+				sourcebooks={[ SourcebookData.core, ...homebrewSourcebooks ]}
 				onClose={() => setDrawer(null)}
 			/>
 		);
@@ -928,7 +927,7 @@ export const Main = (props: Props) => {
 		setDrawer(
 			<SourcebooksModal
 				heroes={heroes}
-				officialSourcebooks={[ SourcebookData.core, SourcebookData.orden ]}
+				officialSourcebooks={[ SourcebookData.core ]}
 				homebrewSourcebooks={homebrewSourcebooks}
 				hiddenSourcebookIDs={hiddenSourcebookIDs}
 				onClose={() => setDrawer(null)}

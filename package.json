@@ -1,10 +1,9 @@
 {
-	"name": "forgesteel",
+	"name": "forgeofages",
 	"private": true,
-	"version": "7.7.0",
+	"version": "0.1.0",
 	"type": "module",
-	"repository": "https://github.com/andyaiken/forgesteel.git",
-	"homepage": "https://andyaiken.github.io/forgesteel/",
+	"repository": "https://github.com/acc1729/forgeofages.git",
 	"scripts": {
 		"update": "npx npm-check-updates --interactive --format group",
 		"start": "vite --host",

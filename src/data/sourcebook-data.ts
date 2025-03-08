@@ -18,18 +18,11 @@ export class SourcebookData {
 	static core: Sourcebook = {
 		id: '',
 		name: 'Core',
-		description: 'Core game elements.',
+		description: 'The core 13th Age book.',
 		isHomebrew: false,
 		ancestries: [
-			AncestryData.devil,
-			AncestryData.dragonKnight,
-			AncestryData.dwarf,
-			AncestryData.wodeElf,
-			AncestryData.highElf,
 			AncestryData.human,
-			AncestryData.orc,
-			AncestryData.polder,
-			AncestryData.revenant
+			AncestryData.dwarf,
 		],
 		cultures: [
 			FactoryLogic.createCulture('Artisan Guild', 'Urban, bureaucratic, creative.', [], EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.creative),
@@ -70,15 +63,7 @@ export class SourcebookData {
 			CareerData.watchOfficer
 		],
 		classes: [
-			ClassData.censor,
-			ClassData.conduit,
-			ClassData.elementalist,
-			ClassData.fury,
-			ClassData.nullClass,
-			ClassData.shadow,
-			ClassData.tactician,
-			ClassData.talent,
-			ClassData.troubadour
+			ClassData.barbarian,
 		],
 		complications: [
 			ComplicationData.advancedStudies,
@@ -496,213 +481,5 @@ export class SourcebookData {
 			ProjectData.fishing,
 			ProjectData.spendTimeWithLovedOnes
 		]
-	};
-
-	static orden: Sourcebook = {
-		id: 'orden',
-		name: 'Orden',
-		description: 'The default setting for Draw Steel.',
-		isHomebrew: false,
-		ancestries: [
-			AncestryData.hakaan,
-			AncestryData.memonek,
-			AncestryData.timeRaider
-		],
-		cultures: [
-			FactoryLogic.createCulture('Devil', 'Urban, bureaucratic, academic.', [ 'Anjali' ], EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.academic),
-			FactoryLogic.createCulture('Dragon Knight', 'Secluded, bureaucratic, martial.', [ 'Vastariax' ], EnvironmentData.secluded, OrganizationData.bureaucratic, UpbringingData.martial),
-			FactoryLogic.createCulture('Dwarf', 'Secluded, bureaucratic, creative.', [ 'Zaliac' ], EnvironmentData.secluded, OrganizationData.bureaucratic, UpbringingData.creative),
-			FactoryLogic.createCulture('Wode Elf', 'Wilderness, bureaucratic, martial.', [ 'Yllric' ], EnvironmentData.wilderness, OrganizationData.bureaucratic, UpbringingData.martial),
-			FactoryLogic.createCulture('High Elf', 'Secluded, bureaucratic, martial.', [ 'Hyrallic' ], EnvironmentData.secluded, OrganizationData.bureaucratic, UpbringingData.martial),
-			FactoryLogic.createCulture('Hakaan', 'Rural, communal, labor.', [ 'Vhoric' ], EnvironmentData.rural, OrganizationData.communal, UpbringingData.labor),
-			FactoryLogic.createCulture('Human', 'Urban, communal, labor.', [ 'Vaslorian' ], EnvironmentData.urban, OrganizationData.communal, UpbringingData.labor),
-			FactoryLogic.createCulture('Memonek', 'Nomadic, communal, academic.', [ 'Axiomatic' ], EnvironmentData.nomadic, OrganizationData.communal, UpbringingData.academic),
-			FactoryLogic.createCulture('Orc', 'Wilderness, anarchic, creative.', [ 'Kalliac' ], EnvironmentData.wilderness, OrganizationData.anarchic, UpbringingData.creative),
-			FactoryLogic.createCulture('Polder', 'Urban, communal, creative.', [ 'Khoursirian' ], EnvironmentData.urban, OrganizationData.communal, UpbringingData.creative),
-			FactoryLogic.createCulture('Time Raider', 'Nomadic, anarchic, martial.', [ 'Voll' ], EnvironmentData.nomadic, OrganizationData.anarchic, UpbringingData.martial)
-		],
-		careers: [],
-		classes: [],
-		complications: [],
-		domains: [],
-		kits: [],
-		perks: [],
-		titles: [],
-		items: [],
-		monsterGroups: [],
-		skills: [
-			{
-				name: 'Timescape',
-				description: 'Knowing about the various planets of the timescape',
-				list: SkillList.Lore
-			}
-		],
-		languages: [
-			{
-				name: 'Anjali',
-				description: 'Spoken in the Hells; the language of contract law.'
-			},
-			{
-				name: 'Axiomatic',
-				description: 'Spoken by Memoneks; native language of Axiom; the common language of the timescape by trade.'
-			},
-			{
-				name: 'Caelian',
-				description: 'The language of the ancient Caelian Empire; the common tongue of Orden.'
-			},
-			{
-				name: 'Filliaric',
-				description: 'Spoken by Angulotls; an offshoot of Cyllinric.'
-			},
-			{
-				name: 'Higaran',
-				description: 'Spoken in Higara.'
-			},
-			{
-				name: 'High Kuric',
-				description: 'Spoken by bredbeddles, giants, ogres, and trolls.'
-			},
-			{
-				name: 'High Rhyvian',
-				description: 'Dead language; was spoken by sun elves.'
-			},
-			{
-				name: 'Hyrallic',
-				description: 'Spoken by high elves; the language of interspecies diplomacy.'
-			},
-			{
-				name: 'Illyvric',
-				description: 'Spoken by shadow elves.'
-			},
-			{
-				name: 'Kalliak',
-				description: 'Spoken by orcs; an offshoot of Zaliac.'
-			},
-			{
-				name: 'Khamish',
-				description: 'Dead language; was spoken by beast lords.'
-			},
-			{
-				name: 'Kheltivari',
-				description: 'Dead language; was spoken by the fae.'
-			},
-			{
-				name: 'Khemharic',
-				description: 'Spoken in Khemhara.'
-			},
-			{
-				name: 'Kethaic',
-				description: 'Spoken by kobolds; a patois of Vastariax and Caelian.'
-			},
-			{
-				name: 'Khelt',
-				description: 'Spoken by bugbears and the fey; an offshoot of Kheltivari.'
-			},
-			{
-				name: 'Khoursirian',
-				description: 'Spoken in Koursir; a distant offshoot of Khamish.'
-			},
-			{
-				name: 'Low Kuric',
-				description: 'Spoken by elementals.'
-			},
-			{
-				name: 'Low Rhyvian',
-				description: 'Dead language; was spoken by sky elves.'
-			},
-			{
-				name: 'Mindspeech',
-				description: 'Spoken by voiceless talkers; a symbolic language shared among native telepaths.'
-			},
-			{
-				name: 'Oaxuatl',
-				description: 'Spoken in Ix.'
-			},
-			{
-				name: 'Old Variac',
-				description: 'Dead language; was spoken by olothecs and voiceless talkers.'
-			},
-			{
-				name: 'Phaedran',
-				description: 'Spoken in Phaedros.'
-			},
-			{
-				name: 'Phorialtic',
-				description: 'Dead language; was spoken by elementals.'
-			},
-			{
-				name: 'Proto-Ctholl',
-				description: 'Spoken by demons; an incomplete offshoot of Tholl.'
-			},
-			{
-				name: 'Rallarian',
-				description: 'Dead language; was spoken by steel dwarves.'
-			},
-			{
-				name: 'Riojan',
-				description: 'Spoken in Rioja.'
-			},
-			{
-				name: 'Szetch',
-				description: 'Spoken by goblins and radenwights.'
-			},
-			{
-				name: 'The First Language',
-				description: 'Spoken by elder dragons; the language of magic.'
-			},
-			{
-				name: 'Tholl',
-				description: 'Spoken by gnolls.'
-			},
-			{
-				name: 'Ullorvic',
-				description: 'Dead language; was spoken by star elves.'
-			},
-			{
-				name: 'Urollialic',
-				description: 'Spoken by olothecs.'
-			},
-			{
-				name: 'Uvalic',
-				description: 'Spoken by the gol.'
-			},
-			{
-				name: 'Vaniric',
-				description: 'Spoken in Vanigar.'
-			},
-			{
-				name: 'Variac',
-				description: 'Spoken by gnomes, olothecs, trolls, and voiceless talkers; the common language of the World Below.'
-			},
-			{
-				name: 'Vaslorian',
-				description: 'Spoken in Vasloria.'
-			},
-			{
-				name: 'Vastariax',
-				description: 'Spoken by dragons and dragon knights.'
-			},
-			{
-				name: 'Vhoric',
-				description: 'Spoken by hakaan; offshoot of the stone giant dialect of High Kuric.'
-			},
-			{
-				name: 'Voll',
-				description: 'Spoken by time raiders.'
-			},
-			{
-				name: 'Yllric',
-				description: 'Spoken by wode elves; the language of druids.'
-			},
-			{
-				name: 'Za\'hariax',
-				description: 'Spoken by overminds.'
-			},
-			{
-				name: 'Zaliac',
-				description: 'Spoken by dwarves; the language of engineering.'
-			}
-		],
-		projects: []
 	};
 }

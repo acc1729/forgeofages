@@ -10,7 +10,6 @@ import { SelectablePanel } from '../../../controls/selectable-panel/selectable-p
 import { Sourcebook } from '../../../../models/sourcebook';
 import { Space } from 'antd';
 import { SubClass } from '../../../../models/subclass';
-import { SubclassPanel } from '../subclass-panel/subclass-panel';
 
 import './class-panel.scss';
 
@@ -28,8 +27,6 @@ export const ClassPanel = (props: Props) => {
 			<div className={props.mode === PanelMode.Full ? 'class-panel' : 'class-panel compact'} id={props.mode === PanelMode.Full ? props.heroClass.id : undefined}>
 				<HeaderText level={1}>{props.heroClass.name || 'Unnamed Class'}</HeaderText>
 				<Markdown text={props.heroClass.description} />
-				<Field label='Heroic Resource' value={props.heroClass.heroicResource} />
-				{props.heroClass.subclasses.length > 0 ? <Field label={`${props.heroClass.subclassName}s`} value={props.heroClass.subclasses.map(c => c.name).join(', ')} /> : null}
 				<Field label='Primary Characteristics' value={props.heroClass.primaryCharacteristics.join(', ')} />
 				{
 					props.mode === PanelMode.Full ?
@@ -53,16 +50,7 @@ export const ClassPanel = (props: Props) => {
 						</Space>
 						: null
 				}
-				{
-					(props.mode === PanelMode.Full) && (props.heroClass.subclasses.length > 0) ?
-						<Space direction='vertical'>
-							<HeaderText level={1}>Subclasses</HeaderText>
-							<div className='subclasses'>
-								{...props.heroClass.subclasses.map(sc => <SelectablePanel key={sc.id} onSelect={props.onSelectSubclass ? () => props.onSelectSubclass!(sc) : undefined}><SubclassPanel subclass={sc} hero={props.hero} mode={PanelMode.Full} /></SelectablePanel>)}
-							</div>
-						</Space>
-						: null
-				}
+				
 			</div>
 		);
 	} catch (ex) {

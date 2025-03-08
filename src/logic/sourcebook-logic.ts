@@ -86,7 +86,6 @@ export class SourcebookLogic {
 	static getSourcebooks = (homebrew: Sourcebook[]) => {
 		const list: Sourcebook[] = [
 			SourcebookData.core,
-			SourcebookData.orden
 		];
 
 		list.push(...Collections.sort(homebrew, cs => cs.name));

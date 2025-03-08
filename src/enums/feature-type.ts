@@ -9,6 +9,7 @@ export enum FeatureType {
 	CharacteristicBonus = 'Characteristic Bonus',
 	Choice = 'Choice',
 	ClassAbility = 'Class Ability',
+	ClassTalent = 'Class Talent',
 	Companion = 'Companion',
 	DamageModifier = 'Damage Modifier',
 	Domain = 'Domain',
@@ -26,5 +27,6 @@ export enum FeatureType {
 	Skill = 'Skill',
 	SkillChoice = 'Skill Choice',
 	Speed = 'Speed',
+	Talent = 'Talent',
 	TitleChoice = 'Title'
 }

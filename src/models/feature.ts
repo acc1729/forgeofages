@@ -17,6 +17,8 @@ import { PerkList } from '../enums/perk-list';
 import { PowerRoll } from './power-roll';
 import { Size } from './size';
 import { SkillList } from '../enums/skill-list';
+import { Talent } from './talent';
+import { Tier } from '../enums/tier';
 import { Title } from './title';
 
 export enum FeatureAddOnType {
@@ -88,6 +90,13 @@ export interface FeatureClassAbilityData extends _FeatureData {
 	selectedIDs: string[];
 }
 export type FeatureClassAbility = FeatureOf<FeatureType.ClassAbility, FeatureClassAbilityData>;
+
+export interface FeatureClassTalentData extends _FeatureData {
+	tier: Tier;
+	count: number;
+	selectedIDs: string[];
+}
+export type FeatureClassTalent = FeatureOf<FeatureType.ClassTalent, FeatureClassTalentData>;
 
 export interface FeatureCompanionData extends _FeatureData {
 	type: 'companion' | 'mount' | 'retainer';
@@ -190,6 +199,11 @@ export interface FeatureSpeedData extends _FeatureData {
 };
 export type FeatureSpeed = FeatureOf<FeatureType.Speed, FeatureSpeedData>;
 
+export interface FeatureTalentData extends _FeatureData {
+	talent: Talent;
+};
+export type FeatureTalent = FeatureOf<FeatureType.Talent, FeatureTalentData>;
+
 export type FeatureText = FeatureOf<FeatureType.Text>;
 
 export interface FeatureTitleChoiceData extends _FeatureData {
@@ -209,6 +223,7 @@ export type Feature =
 	| FeatureCharacteristicBonus
 	| FeatureChoice
 	| FeatureClassAbility
+	| FeatureClassTalent
 	| FeatureCompanion
 	| FeatureDamageModifier
 	| FeatureDomain
@@ -226,6 +241,7 @@ export type Feature =
 	| FeatureSkill
 	| FeatureSkillChoice
 	| FeatureSpeed
+	| FeatureTalent
 	| FeatureText
 	| FeatureTitleChoice;
 

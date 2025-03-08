@@ -213,7 +213,7 @@ export class PDFExport {
 			const homebrew = (await localforage.getItem<Sourcebook[]>(
 				'forgesteel-homebrew-settings'
 			)) as Sourcebook[];
-			const books = [ SourcebookData.core, SourcebookData.orden ];
+			const books = [ SourcebookData.core];
 			if (homebrew) books.push(...homebrew);
 			texts['Skills'] = HeroLogic.getSkills(hero, books).map(s => '• ' + s.name).join('\n');
 
