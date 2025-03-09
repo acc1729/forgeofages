@@ -3,7 +3,7 @@ import { Outlet } from 'react-router';
 import { ReactNode } from 'react';
 import { useMediaQuery } from '../../hooks/use-media-query';
 
-import pbds from '../../assets/powered-by-draw-steel.png';
+import communityUseLogo from '../../assets/13thagecommunityuselogo.webp';
 
 interface Props {
 	section: 'hero' | 'library' | 'encounter';
@@ -25,8 +25,8 @@ export const MainLayout = (props: Props) => {
 				!isSmall ?
 					<div className='main-footer'>
 						<div className='main-footer-section legal'>
-							<img className='ds-logo' src={pbds} />
-							FORGE STEEL is an independent product published under the DRAW STEEL Creator License and is not affiliated with MCDM Productions, LLC. DRAW STEEL © 2024 MCDM Productions, LLC.
+							<img className='ds-logo' src={communityUseLogo} />
+							FORGE OF AGES uses material licensed under the <a href="https://pelgranepress.com/2014/02/19/13th-age-archmage-engine-license/">13th Age Archmage Engine License</a>.
 						</div>
 					</div>
 					: null

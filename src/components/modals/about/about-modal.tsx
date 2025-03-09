@@ -17,27 +17,18 @@ export const AboutModal = (props: Props) => {
 				content={
 					<div className='about-modal'>
 						<p>
-							<b>FORGE STEEL</b> is an independent product published under the DRAW STEEL Creator License and is not affiliated with MCDM Productions, LLC.
+							<b>FORGE OF AGES</b> is an independent product not affiliated with Pelgrane Press or Fire Opal Media.
+							It uses material licensed under the <a href="https://pelgranepress.com/2014/02/19/13th-age-archmage-engine-license/">13th Age Archmage Engine License</a>.
 						</p>
 						<p>
-							<b>DRAW STEEL</b> © 2024 <a href='https://mcdmproductions.com/' target='_blank'>MCDM Productions, LLC.</a>
-						</p>
-						<Divider />
-						<p>
-							Designed by <a href='mailto:andy.aiken@live.co.uk'>Andy Aiken</a>.
-						</p>
-						<p>
-							To suggest a new feature or improvement, or to report a bug, go <a href='https://github.com/andyaiken/forgesteel/issues' target='_blank'>here</a>.
-						</p>
-						<p>
-							If you would like to contribute to this project, you can find the code <a href='https://github.com/andyaiken/forgesteel' target='_blank'>here</a>.
+							<b><a href="https://pelgranepress.com/13th-age/">13th Age</a></b> © 2013 <a href='https://www.fireopalmedia.com/' target='_blank'>Fire Opal Media</a>.
 						</p>
 						<Divider />
 						<p>
-							<b>FORGE STEEL</b> is free.
+							Based on <a href="https://andyaiken.github.io/forgesteel/">FORGE STEEL</a> by <a href='mailto:andy.aiken@live.co.uk'>Andy Aiken</a>.
 						</p>
 						<p>
-							If you really feel the need to show your appreciation, I'd be grateful if you would take whatever you feel the app is worth and donate it to a local mental health charity.
+							Source code and bug reports can be found <a href='https://github.com/acc1729/forgeofages/issues' target='_blank'>here</a>.
 						</p>
 						<Divider />
 						<Field label='Version' value={pkg.version} />
