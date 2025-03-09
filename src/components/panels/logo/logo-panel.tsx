@@ -10,7 +10,7 @@ export const LogoPanel = (props: Props) => {
 	return (
 		<div className='logo-panel' onClick={props.onClick}>
 			<img className='logo-panel-image' src={shield} />
-			<div className='logo-panel-text'>Forge of Ages (in progress, fork of Forge Steel)</div>
+			<div className='logo-panel-text'>Forge of Ages</div>
 		</div>
 	);
 };

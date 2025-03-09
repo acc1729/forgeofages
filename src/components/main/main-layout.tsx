@@ -31,10 +31,10 @@ export const MainLayout = (props: Props) => {
 					</div>
 					: null
 			}
-			<Drawer placement='left' open={props.directory !== null} onClose={() => props.setDirectory(null)} closeIcon={null} width='250px'>
+			<Drawer placement='left' open={props.directory !== null} onClose={() => props.setDirectory(null)} closeIcon={null} width='350px'>
 				{props.directory}
 			</Drawer>
-			<Drawer open={props.drawer !== null} onClose={() => props.setDrawer(null)} closeIcon={null} width='500px'>
+			<Drawer open={props.drawer !== null} onClose={() => props.setDrawer(null)} closeIcon={null} width='350px'>
 				{props.drawer}
 			</Drawer>
 		</div>
