@@ -3,4 +3,5 @@ import { Tier } from '../enums/tier';
 
 export interface Talent extends Element {
   tier: Tier;
+  cost: number;
 }

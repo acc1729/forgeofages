@@ -157,6 +157,7 @@ export class FeatureLogic {
 			case FeatureType.AncestryFeatureChoice:
 			case FeatureType.Choice:
 			case FeatureType.ClassAbility:
+			case FeatureType.ClassTalent:
 			case FeatureType.Companion:
 			case FeatureType.Domain:
 			case FeatureType.DomainFeature:

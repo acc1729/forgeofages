@@ -51,7 +51,7 @@ interface Props {
 }
 
 export const FeaturePanel = (props: Props) => {
-	const [ drawerOpen, setDrawerOpen ] = useState<boolean>(false);
+	const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
 	// #region Selection
 
@@ -160,7 +160,7 @@ export const FeaturePanel = (props: Props) => {
 	};
 
 	const getSelectionChoice = (data: FeatureChoiceData) => {
-		let availableOptions = [ ...data.options ];
+		let availableOptions = [...data.options];
 		if (availableOptions.some(opt => opt.feature.type === FeatureType.AncestryFeatureChoice)) {
 			availableOptions = availableOptions.filter(opt => opt.feature.type !== FeatureType.AncestryFeatureChoice);
 			const additionalOptions = HeroLogic.getFormerAncestries(props.hero!)
@@ -232,7 +232,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -302,7 +302,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -334,10 +334,8 @@ export const FeaturePanel = (props: Props) => {
 			.filter(f => f.id !== props.feature.id)
 			.filter(f => f.type === FeatureType.ClassTalent)
 			.flatMap(f => f.data.selectedIDs);
-
-		const talents = props.hero?.class?.talents || [];
-			// .filter(a => a.cost === data.cost)
-			// .filter(a => a.minLevel <= data.minLevel) || [];
+			
+		const talents = props.hero?.class?.talents.filter(t => t.tier === data.tier) || [];
 
 		const distinctTalents = Collections.distinct(talents, a => a.name);
 		const sortedTalents = Collections.sort(distinctTalents, a => a.name);
@@ -367,7 +365,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -507,7 +505,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -565,7 +563,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -628,7 +626,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -686,7 +684,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -769,7 +767,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -835,7 +833,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -912,7 +910,7 @@ export const FeaturePanel = (props: Props) => {
 					onChange={value => {
 						let ids: string[] = [];
 						if (data.count === 1) {
-							ids = value !== undefined ? [ value as string ] : [];
+							ids = value !== undefined ? [value as string] : [];
 						} else {
 							ids = value as string[];
 						}
@@ -984,7 +982,7 @@ export const FeaturePanel = (props: Props) => {
 							onChange={value => {
 								let ids: string[] = [];
 								if (data.count === 1) {
-									ids = value !== undefined ? [ value as string ] : [];
+									ids = value !== undefined ? [value as string] : [];
 								} else {
 									ids = value as string[];
 								}
@@ -1179,6 +1177,30 @@ export const FeaturePanel = (props: Props) => {
 		}
 
 		return null;
+	};
+
+	const getInformationClassTalent = (data: FeatureClassTalentData) => {
+		if ((data.selectedIDs.length > 0) && props.hero && props.hero.class) {
+			const talents = props.hero.class.talents.filter(t => t.tier === data.tier) || [];
+			return (
+				<Space direction='vertical' style={{ width: '100%', padding: '0 20px', borderLeft: '5px solid rgb(200 200 200)' }}>
+					{
+						data.selectedIDs.map(talentID => {
+							const talent = talents.find(t => t.id === talentID) as Talent;
+							return <TalentPanel key={talent.id} talent={talent} mode={PanelMode.Full} />
+						})
+					}
+				</Space>
+			);
+		}
+
+		return (
+			<div>
+				<div className='ds-text'>
+						{data.count === 1 ? 'Choose a talent' : `Choose ${data.count} talents.`}
+				</div>
+			</div>
+		);
 	};
 
 	const getInformationCompanion = (data: FeatureCompanionData) => {
@@ -1482,6 +1504,8 @@ export const FeaturePanel = (props: Props) => {
 				return getInformationChoice(props.feature.data);
 			case FeatureType.ClassAbility:
 				return getInformationClassAbility(props.feature.data);
+			case FeatureType.ClassTalent:
+				return getInformationClassTalent(props.feature.data);
 			case FeatureType.Companion:
 				return getInformationCompanion(props.feature.data);
 			case FeatureType.DamageModifier:

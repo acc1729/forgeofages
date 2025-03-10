@@ -1,6 +1,6 @@
 import { Ability, AbilityDistance, AbilityType } from '../models/ability';
 import { Encounter, EncounterGroup, EncounterSlot } from '../models/encounter';
-import { Feature, FeatureAbility, FeatureAbilityCost, FeatureAbilityData, FeatureAddOn, FeatureAddOnType, FeatureAncestryChoice, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureChoice, FeatureClassAbility, FeatureClassTalent, FeatureCompanion, FeatureDamageModifier, FeatureDomain, FeatureDomainFeature, FeatureItemChoice, FeatureKit, FeatureKitType, FeatureLanguage, FeatureLanguageChoice, FeatureMalice, FeatureMultiple, FeaturePackage, FeaturePerk, FeatureSize, FeatureSkill, FeatureSkillChoice, FeatureSpeed, FeatureTalent, FeatureText, FeatureTitleChoice } from '../models/feature';
+import { Feature, FeatureAbility, FeatureAbilityCost, FeatureAbilityData, FeatureAddOn, FeatureAddOnType, FeatureAncestryChoice, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureChoice, FeatureClassAbility, FeatureClassTalent, FeatureCompanion, FeatureDamageModifier, FeatureDomain, FeatureDomainFeature, FeatureItemChoice, FeatureKit, FeatureKitType, FeatureLanguage, FeatureLanguageChoice, FeatureMalice, FeatureMultiple, FeaturePackage, FeaturePerk, FeatureSize, FeatureSkill, FeatureSkillChoice, FeatureSpeed, FeatureTalent, FeatureTalentData, FeatureText, FeatureTitleChoice } from '../models/feature';
 import { Kit, KitDamageBonus } from '../models/kit';
 import { Monster, MonsterGroup, MonsterRole } from '../models/monster';
 import { Montage, MontageChallenge, MontageSection } from '../models/montage';
@@ -603,6 +603,22 @@ export class FactoryLogic {
 		};
 	};
 
+	static createTalent = (data: {
+		id: string,
+		name: string,
+		description: string,
+		tier?: Tier,
+		cost?: number,
+	}): Talent => {
+		return {
+			id: data.id,
+			name: data.name,
+			description: data.description,
+			tier: data.tier || Tier.Adventurer,
+			cost: data.cost || 1,
+		};
+	};
+
 	static damageModifier = {
 		create: (data: { damageType: string, modifierType: DamageModifierType, value: number }): DamageModifier => {
 			return {
@@ -1174,11 +1190,11 @@ export class FactoryLogic {
 				}
 			};
 		},
-		createTalent: (data: { id: string, name: string, description: string, talent: Talent }): FeatureTalent => {
+		createTalent: (data: FeatureTalentData): FeatureTalent => {
 			return {
-				id: data.id,
-				name: data.name,
-				description: data.description,
+				id: data.talent.id,
+				name: data.talent.name,
+				description: data.talent.description,
 				type: FeatureType.Talent,
 				data: {
 					talent: data.talent,

@@ -11,7 +11,7 @@ import './talent-panel.scss';
 interface Props {
 	talent: Talent;
 	hero?: Hero;
-	cost?: number | 'signature';
+	cost?: number;
 	repeatable?: boolean;
 	options?: Options;
 	mode?: PanelMode;

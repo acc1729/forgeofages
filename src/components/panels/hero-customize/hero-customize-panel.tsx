@@ -168,6 +168,12 @@ export const HeroCustomizePanel = (props: Props) => {
 						{feature.data.cost !== 'signature' ? <NumberSpin min={3} max={7} steps={[ 2 ]} value={feature.data.cost} onChange={value => setCost(feature, value)} /> : null}
 					</div>
 				);
+			case FeatureType.ClassTalent:
+				return (
+					<div>
+						<HeaderText>Talents</HeaderText>
+					</div>
+				);
 			case FeatureType.Perk:
 				return (
 					<div>
