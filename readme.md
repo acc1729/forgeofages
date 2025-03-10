@@ -1,42 +1,23 @@
-# Forge Steel
+# Forge of Ages
 
-**FORGE STEEL** is a hero builder app for **DRAW STEEL**, designed by [Andy Aiken](mailto:andy.aiken@live.co.uk).
+**FORGE OF AGES** is a hero builder app for **13TH AGE**.
+Forked from **FORGE STEEL**, a hero builder app for **DRAW STEEL**, designed by [Andy Aiken](mailto:andy.aiken@live.co.uk).
 
 ## Heroes
 
-With this app you can create heroes using the **DRAW STEEL** backer packet.
-
-![Hero Edit](./src/assets/screenshots/hero-edit.png)
-Here is a hero being edited.
-
-![Hero Sheet](./src/assets/screenshots/hero-sheet.png)
-This shows a hero's character sheet.
-
-![Hero State](./src/assets/screenshots/hero-state.png)
-Here we can see the hero being played in a session.
-
-![Hero Roll](./src/assets/screenshots/hero-roll.png)
-The player is making the power roll for one of the hero's abilities.
+TODO Add screenshots with 13A content.
 
 ## Homebrew
 
-You can also use this app to create homebrew hero-building elements - ancestries, classes, kits, and so on.
-
-![Elements](./src/assets/screenshots/elements.png)
-Here we can see the list of elements that can be homebrewed. To create a homebrew element you can create it from whole cloth, or copy an official element.
-
-![Homebrew](./src/assets/screenshots/homebrew.png)
-here we can see a homebrew kit being created.
+TODO Add screenshots with 13A content.
 
 ## Legal
 
-**FORGE STEEL** is an independent product published under the DRAW STEEL Creator License and is not affiliated with MCDM Productions, LLC.
-
-**DRAW STEEL** © 2024 MCDM Productions, LLC.
+TODO Add legal notices and disclaimers related to 13th Age, Pelgran Press, and Fire Opal Media.
 
 ## Development
 
-**FORGE STEEL** is written in Typescript, using React and Ant Design.
+**FORGE OF AGES** is written in Typescript, using React and Ant Design.
 
 If you would like to contribute, you can:
 
@@ -46,7 +27,7 @@ If you would like to contribute, you can:
 To run the app locally, run the following commands:
 
 ```
-npm install
+npm ci
 npm run start
 ```
 
