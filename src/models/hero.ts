@@ -44,6 +44,8 @@ export interface Hero {
 	id: string;
 	name: string;
 
+	oneUniqueThing: string;
+
 	folder: string;
 	settingIDs: string[];
 

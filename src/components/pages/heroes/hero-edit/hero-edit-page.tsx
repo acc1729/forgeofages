@@ -315,6 +315,13 @@ export const HeroEditPage = (props: Props) => {
 			setDirty(true);
 		};
 
+		const setOneUniqueThing = (value: string) => {
+			const heroCopy = Utils.copy(hero);
+			heroCopy.oneUniqueThing = value;
+			setHero(heroCopy);
+			setDirty(true);
+		};
+
 		const setFolder = (value: string) => {
 			const heroCopy = Utils.copy(hero);
 			heroCopy.folder = value;
@@ -435,6 +442,7 @@ export const HeroEditPage = (props: Props) => {
 							sourcebooks={props.sourcebooks.filter(cs => hero.settingIDs.includes(cs.id))}
 							allSourcebooks={props.sourcebooks}
 							setName={setName}
+							setOneUniqueThing={setOneUniqueThing}
 							setFolder={setFolder}
 							setSettingIDs={setSettingIDs}
 							addFeature={addFeature}
@@ -1046,6 +1054,7 @@ interface DetailsSectionProps {
 	sourcebooks: Sourcebook[];
 	allSourcebooks: Sourcebook[];
 	setName: (value: string) => void;
+	setOneUniqueThing: (value: string) => void;
 	setFolder: (value: string) => void;
 	setSettingIDs: (settingIDs: string[]) => void;
 	addFeature: (feature: Feature) => void;
@@ -1072,6 +1081,14 @@ const DetailsSection = (props: DetailsSectionProps) => {
 						addonAfter={<ThunderboltOutlined className='random-btn' onClick={() => props.setName(NameGenerator.generateName())} />}
 						value={props.hero.name}
 						onChange={e => props.setName(e.target.value)}
+					/>
+					<HeaderText>One Unique Thing (OUT)</HeaderText>
+					<Input
+						className={props.hero.oneUniqueThing === '' ? 'input-empty' : ''}
+						placeholder='One Unique Thing'
+						allowClear={true}
+						value={props.hero.oneUniqueThing}
+						onChange={e => props.setOneUniqueThing(e.target.value)}
 					/>
 					<HeaderText>Folder</HeaderText>
 					<AutoComplete
