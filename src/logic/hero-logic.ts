@@ -388,8 +388,8 @@ Complex or time-consuming tests might require an action if made in combat - or c
 			}
 		}
 
-		hero.features
-			.filter(f => f.type === FeatureType.CharacteristicBonus)
+ 		HeroLogic.getFeatures(hero)
+ 			.filter(f => f.type === FeatureType.CharacteristicBonus)
 			.filter(f => f.data.characteristic === characteristic)
 			.forEach(f => value += f.data.value);
 

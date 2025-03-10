@@ -325,20 +325,23 @@ export const HeroPanel = (props: Props) => {
 			<Row gutter={[ 16, 16 ]}>
 				<Col span={24}>
 					<div className='characteristics-box'>
-						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Might)}>
-							<Statistic title='Might' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Might)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Strength)}>
+							<Statistic title='Strength' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Strength)} />
 						</div>
-						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Agility)}>
-							<Statistic title='Agility' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Agility)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Constitution)}>
+							<Statistic title='Constitution' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Constitution)} />
 						</div>
-						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Reason)}>
-							<Statistic title='Reason' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Reason)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Dexterity)}>
+							<Statistic title='Dexterity' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Dexterity)} />
 						</div>
-						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Intuition)}>
-							<Statistic title='Intuition' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Intuition)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Intelligence)}>
+							<Statistic title='Intelligence' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Intelligence)} />
 						</div>
-						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Presence)}>
-							<Statistic title='Presence' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Presence)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Wisdom)}>
+							<Statistic title='Wisdom' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Wisdom)} />
+						</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Charisma)}>
+							<Statistic title='Charisma' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Charisma)} />
 						</div>
 					</div>
 				</Col>

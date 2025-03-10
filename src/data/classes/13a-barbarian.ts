@@ -19,6 +19,28 @@ export const barbarian: HeroClass = {
 					While raging, you roll 2d20 to hit with your barbarian melee and thrown weapon attacks instead of 1d20. Use the higher roll for the attack. If you roll a natural 11+ with both dice, and your highest attack roll is a hit, the attack is a critical hit!
 					Recharge 16+: After a battle in which you rage, roll a d20 and add your Constitution modifier; on a 16+ you can use Barbarian Rage again later in the day.`
 				}),
+				FactoryLogic.feature.createChoice({
+					id: 'barbarian-characterist-bonus',
+					name: 'Barbarian Characteristic Bonus',
+					options: [
+						{
+							feature: FactoryLogic.feature.createCharacteristicBonus({
+								id: 'barbarian-bonus-str',
+								characteristic: Characteristic.Strength,
+								value: 2,
+							}),
+							value: 1,
+						},
+						{
+							feature: FactoryLogic.feature.createCharacteristicBonus({
+								id: 'barbarian-bonus-con',
+								characteristic: Characteristic.Constitution,
+								value: 2,
+							}),
+							value: 1,
+						},
+					]
+				}),
 				FactoryLogic.feature.createClassTalentChoice({
 					id: 'barbarian-talents-1',
 					name: 'Barbarian Talents',
