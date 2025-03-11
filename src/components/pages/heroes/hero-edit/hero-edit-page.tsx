@@ -1,26 +1,17 @@
 import { Alert, AutoComplete, Button, Divider, Input, Radio, Segmented, Select, Space } from 'antd';
 import { CloseOutlined, SaveOutlined, SearchOutlined, ThunderboltOutlined } from '@ant-design/icons';
-import { CultureData, EnvironmentData, OrganizationData, UpbringingData } from '../../../../data/culture-data';
-import { Feature, FeatureBonusData, FeatureData } from '../../../../models/feature';
+import { Feature, FeatureData } from '../../../../models/feature';
 import { Hero, HeroEditTab } from '../../../../models/hero';
 import { ReactNode, useMemo, useState } from 'react';
 import { Ancestry } from '../../../../models/ancestry';
 import { AncestryPanel } from '../../../panels/elements/ancestry-panel/ancestry-panel';
 import { AppHeader } from '../../../panels/app-header/app-header';
-import { Career } from '../../../../models/career';
-import { CareerPanel } from '../../../panels/elements/career-panel/career-panel';
 import { Characteristic } from '../../../../enums/characteristic';
 import { ClassPanel } from '../../../panels/elements/class-panel/class-panel';
 import { Collections } from '../../../../utils/collections';
-import { Complication } from '../../../../models/complication';
-import { ComplicationPanel } from '../../../panels/elements/complication-panel/complication-panel';
-import { Culture } from '../../../../models/culture';
-import { CulturePanel } from '../../../panels/elements/culture-panel/culture-panel';
 import { Element } from '../../../../models/element';
-import { FeatureField } from '../../../../enums/feature-field';
 import { FeatureLogic } from '../../../../logic/feature-logic';
 import { FeaturePanel } from '../../../panels/elements/feature-panel/feature-panel';
-import { FeatureType } from '../../../../enums/feature-type';
 import { Field } from '../../../controls/field/field';
 import { Format } from '../../../../utils/format';
 import { HeaderText } from '../../../controls/header-text/header-text';
@@ -83,34 +74,6 @@ export const HeroEditPage = (props: Props) => {
 					} else {
 						return PageState.NotStarted;
 					}
-				case 'culture':
-					if (hero.culture) {
-						if (hero.culture.languages.length === 0) {
-							return PageState.InProgress;
-						}
-						if (!hero.culture.environment || !hero.culture.organization || !hero.culture.upbringing) {
-							return PageState.InProgress;
-						}
-						const features: Feature[] = [];
-						if (hero.culture.environment) {
-							features.push(hero.culture.environment);
-						}
-						if (hero.culture.organization) {
-							features.push(hero.culture.organization);
-						}
-						if (hero.culture.upbringing) {
-							features.push(hero.culture.upbringing);
-						}
-						return (features.filter(f => FeatureLogic.isChoice(f)).filter(f => !FeatureLogic.isChosen(f)).length > 0) ? PageState.InProgress : PageState.Completed;
-					} else {
-						return PageState.NotStarted;
-					}
-				case 'career':
-					if (hero.career) {
-						return (hero.career.features.filter(f => FeatureLogic.isChoice(f)).filter(f => !FeatureLogic.isChosen(f)).length > 0) ? PageState.InProgress : PageState.Completed;
-					} else {
-						return PageState.NotStarted;
-					}
 				case 'class':
 					if (hero.class) {
 						if (hero.class.characteristics.every(ch => ch.value === 0)) {
@@ -125,12 +88,6 @@ export const HeroEditPage = (props: Props) => {
 					} else {
 						return PageState.NotStarted;
 					}
-				case 'complication':
-					if (hero.complication) {
-						return (hero.complication.features.filter(f => FeatureLogic.isChoice(f)).filter(f => !FeatureLogic.isChosen(f)).length > 0) ? PageState.InProgress : PageState.Completed;
-					} else {
-						return PageState.Optional;
-					}
 				case 'details':
 					if (hero.name) {
 						return PageState.Completed;
@@ -138,110 +95,13 @@ export const HeroEditPage = (props: Props) => {
 						return PageState.NotStarted;
 					}
 			}
+			return PageState.InProgress;
 		};
 
 		const setAncestry = (ancestry: Ancestry | null) => {
 			const ancestryCopy = Utils.copy(ancestry) as Ancestry | null;
 			const heroCopy = Utils.copy(hero);
 			heroCopy.ancestry = ancestryCopy;
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setCulture = (culture: Culture | null) => {
-			const cultureCopy = Utils.copy(culture) as Culture | null;
-			const heroCopy = Utils.copy(hero);
-			heroCopy.culture = cultureCopy;
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setLanguages = (languages: string[]) => {
-			const heroCopy = Utils.copy(hero);
-			if (heroCopy.culture) {
-				heroCopy.culture.languages = languages;
-			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setEnvironment = (id: string | null) => {
-			const heroCopy = Utils.copy(hero);
-			if (heroCopy.culture) {
-				const env = EnvironmentData.getEnvironments().find(e => e.id === id);
-				if (env) {
-					const envCopy = Utils.copy(env) as Feature;
-					heroCopy.culture.environment = envCopy;
-				} else {
-					heroCopy.culture.environment = null;
-				}
-			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setOrganization = (id: string | null) => {
-			const heroCopy = Utils.copy(hero);
-			if (heroCopy.culture) {
-				const org = OrganizationData.getOrganizations().find(o => o.id === id);
-				if (org) {
-					const orgCopy = Utils.copy(org) as Feature;
-					heroCopy.culture.organization = orgCopy;
-				} else {
-					heroCopy.culture.organization = null;
-				}
-			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setUpbringing = (id: string | null) => {
-			const heroCopy = Utils.copy(hero);
-			if (heroCopy.culture) {
-				const ub = UpbringingData.getUpbringings().find(u => u.id === id);
-				if (ub) {
-					const ubCopy = Utils.copy(ub) as Feature;
-					heroCopy.culture.upbringing = ubCopy;
-				} else {
-					heroCopy.culture.upbringing = null;
-				}
-			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setCareer = (career: Career | null) => {
-			const careerCopy = Utils.copy(career) as Career | null;
-			const heroCopy = Utils.copy(hero);
-			heroCopy.career = careerCopy;
-			if (careerCopy) {
-				heroCopy.state.projectPoints = 0;
-				heroCopy.state.renown = 0;
-				heroCopy.state.wealth = 1;
-				careerCopy.features.filter(f => f.type === FeatureType.Bonus).map(f => {
-					const data = f.data as FeatureBonusData;
-					switch (data.field) {
-						case FeatureField.ProjectPoints:
-							heroCopy.state.projectPoints += data.value;
-							break;
-						case FeatureField.Renown:
-							heroCopy.state.renown += data.value;
-							break;
-						case FeatureField.Wealth:
-							heroCopy.state.wealth += data.value;
-							break;
-					}
-				});
-			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setIncitingIncident = (id: string | null) => {
-			const heroCopy = Utils.copy(hero);
-			if (heroCopy.career) {
-				heroCopy.career.incitingIncidents.selectedID = id;
-			}
 			setHero(heroCopy);
 			setDirty(true);
 		};
@@ -276,14 +136,6 @@ export const HeroEditPage = (props: Props) => {
 			if (heroCopy.class) {
 				heroCopy.class.characteristics = array;
 			}
-			setHero(heroCopy);
-			setDirty(true);
-		};
-
-		const setComplication = (complication: Complication | null) => {
-			const complicationCopy = Utils.copy(complication) as Complication | null;
-			const heroCopy = Utils.copy(hero);
-			heroCopy.complication = complicationCopy;
 			setHero(heroCopy);
 			setDirty(true);
 		};
@@ -360,17 +212,8 @@ export const HeroEditPage = (props: Props) => {
 				case 'ancestry':
 					setAncestry(Collections.draw(SourcebookLogic.getAncestries(props.sourcebooks)));
 					break;
-				case 'culture':
-					setCulture(Collections.draw([ CultureData.bespoke, ...SourcebookLogic.getCultures(props.sourcebooks) ]));
-					break;
-				case 'career':
-					setCareer(Collections.draw(SourcebookLogic.getCareers(props.sourcebooks)));
-					break;
 				case 'class':
 					setClass(Collections.draw(SourcebookLogic.getClasses(props.sourcebooks)));
-					break;
-				case 'complication':
-					setComplication(Collections.draw(SourcebookLogic.getComplications(props.sourcebooks)));
 					break;
 			}
 		};
@@ -387,31 +230,6 @@ export const HeroEditPage = (props: Props) => {
 							setFeatureData={setFeatureData}
 						/>
 					);
-				case 'culture':
-					return (
-						<CultureSection
-							hero={hero}
-							sourcebooks={props.sourcebooks.filter(cs => hero.settingIDs.includes(cs.id))}
-							searchTerm={searchTerm}
-							selectCulture={setCulture}
-							selectLanguages={setLanguages}
-							selectEnvironment={setEnvironment}
-							selectOrganization={setOrganization}
-							selectUpbringing={setUpbringing}
-							setFeatureData={setFeatureData}
-						/>
-					);
-				case 'career':
-					return (
-						<CareerSection
-							hero={hero}
-							sourcebooks={props.sourcebooks.filter(cs => hero.settingIDs.includes(cs.id))}
-							searchTerm={searchTerm}
-							selectCareer={setCareer}
-							selectIncitingIncident={setIncitingIncident}
-							setFeatureData={setFeatureData}
-						/>
-					);
 				case 'class':
 					return (
 						<ClassSection
@@ -421,16 +239,6 @@ export const HeroEditPage = (props: Props) => {
 							selectClass={setClass}
 							setLevel={setLevel}
 							selectCharacteristics={setCharacteristics}
-							setFeatureData={setFeatureData}
-						/>
-					);
-				case 'complication':
-					return (
-						<ComplicationSection
-							hero={hero}
-							sourcebooks={props.sourcebooks.filter(cs => hero.settingIDs.includes(cs.id))}
-							searchTerm={searchTerm}
-							selectComplication={setComplication}
 							setFeatureData={setFeatureData}
 						/>
 					);
@@ -460,17 +268,8 @@ export const HeroEditPage = (props: Props) => {
 				case 'ancestry':
 					showSearchBar = !hero.ancestry;
 					break;
-				case 'culture':
-					showSearchBar = !hero.culture;
-					break;
-				case 'career':
-					showSearchBar = !hero.career;
-					break;
 				case 'class':
 					showSearchBar = !hero.class;
-					break;
-				case 'complication':
-					showSearchBar = !hero.complication;
 					break;
 			}
 		}
@@ -491,10 +290,7 @@ export const HeroEditPage = (props: Props) => {
 							name='sections'
 							options={([
 								'ancestry',
-								'culture',
-								'career',
 								'class',
-								'complication',
 								'details'
 							] as const).map(tab => ({
 								value: tab,
@@ -603,224 +399,6 @@ const AncestrySection = (props: AncestrySectionProps) => {
 	}
 };
 
-interface CultureSectionProps {
-	hero: Hero;
-	sourcebooks: Sourcebook[];
-	searchTerm: string;
-	selectCulture: (culture: Culture | null) => void;
-	selectLanguages: (languages: string[]) => void;
-	selectEnvironment: (id: string | null) => void;
-	selectOrganization: (id: string | null) => void;
-	selectUpbringing: (id: string | null) => void;
-	setFeatureData: (featureID: string, data: FeatureData) => void;
-}
-
-const CultureSection = (props: CultureSectionProps) => {
-	try {
-		const cultures = [ CultureData.bespoke, ...SourcebookLogic.getCultures(props.sourcebooks) ].filter(c => matchElement(c, props.searchTerm));
-		const options = cultures.map(c => (
-			<SelectablePanel key={c.id} onSelect={() => props.selectCulture(c)}>
-				<CulturePanel culture={c} />
-			</SelectablePanel>
-		));
-
-		let choices: ReactNode[] = [];
-		if (props.hero.culture) {
-			choices = FeatureLogic.getFeaturesFromCulture(props.hero.culture, props.hero)
-				.filter(f => FeatureLogic.isChoice(f))
-				.map(f => (
-					<SelectablePanel key={f.id}>
-						<FeaturePanel feature={f} mode={PanelMode.Full} hero={props.hero} sourcebooks={props.sourcebooks} setData={props.setFeatureData} />
-					</SelectablePanel>
-				));
-
-			if (props.hero.culture.id === CultureData.bespoke.id) {
-				choices.unshift(
-					<SelectablePanel key='bespoke'>
-						<HeaderText>Bespoke Culture</HeaderText>
-						<div className='ds-text'>Choose your Environment, Organization, and Upbringing.</div>
-						<Space direction='vertical' style={{ width: '100%' }}>
-							<Select
-								style={{ width: '100%' }}
-								className={props.hero.culture.environment === null ? 'selection-empty' : ''}
-								allowClear={true}
-								placeholder='Select'
-								options={EnvironmentData.getEnvironments().map(s => ({ value: s.id, label: s.name, desc: s.description }))}
-								optionRender={option => <Field label={option.data.label} value={option.data.desc} />}
-								value={props.hero.culture.environment ? props.hero.culture.environment.id : null}
-								onChange={props.selectEnvironment}
-							/>
-							<Select
-								style={{ width: '100%' }}
-								className={props.hero.culture.organization === null ? 'selection-empty' : ''}
-								allowClear={true}
-								placeholder='Select'
-								options={OrganizationData.getOrganizations().map(s => ({ value: s.id, label: s.name, desc: s.description }))}
-								optionRender={option => <Field label={option.data.label} value={option.data.desc} />}
-								value={props.hero.culture.organization ? props.hero.culture.organization.id : null}
-								onChange={props.selectOrganization}
-							/>
-							<Select
-								style={{ width: '100%' }}
-								className={props.hero.culture.upbringing === null ? 'selection-empty' : ''}
-								allowClear={true}
-								placeholder='Select'
-								options={UpbringingData.getUpbringings().map(s => ({ value: s.id, label: s.name, desc: s.description }))}
-								optionRender={option => <Field label={option.data.label} value={option.data.desc} />}
-								value={props.hero.culture.upbringing ? props.hero.culture.upbringing.id : null}
-								onChange={props.selectUpbringing}
-							/>
-						</Space>
-					</SelectablePanel>
-				);
-			}
-
-			choices.unshift(
-				<SelectablePanel key='language'>
-					<HeaderText>Language</HeaderText>
-					<div className='ds-text'>Choose your language.</div>
-					<Select
-						style={{ width: '100%' }}
-						className={props.hero.culture.languages.length === 0 ? 'selection-empty' : ''}
-						allowClear={true}
-						placeholder='Select'
-						options={SourcebookLogic.getLanguages(props.sourcebooks).map(l => ({ label: l.name, value: l.name, desc: l.description }))}
-						optionRender={option => <Field label={option.data.label} value={option.data.desc} />}
-						value={props.hero.culture.languages.length > 0 ? props.hero.culture.languages[0] : null}
-						onChange={value => props.selectLanguages(value ? [ value ] : [])}
-					/>
-				</SelectablePanel>
-			);
-		}
-
-		return (
-			<div className='hero-edit-content'>
-				{
-					props.hero.culture ?
-						<div className='hero-edit-content-column selected' id='culture-selected'>
-							<SelectablePanel showShadow={false} action={{ label: 'Unselect', onClick: () => props.selectCulture(null) }}>
-								<CulturePanel culture={props.hero.culture} mode={PanelMode.Full} />
-							</SelectablePanel>
-						</div>
-						: null
-				}
-				{
-					!props.hero.culture && (options.length > 0) ?
-						<div className='hero-edit-content-column grid' id='culture-list'>
-							{options}
-						</div>
-						: null
-				}
-				{
-					!props.hero.culture && (options.length === 0) ?
-						<div className='hero-edit-content-column' id='culture-list'>
-							<EmptyMessage hero={props.hero} />
-						</div>
-						: null
-				}
-				{
-					choices.length > 0 ?
-						<div className='hero-edit-content-column choices' id='culture-choices'>
-							<HeaderText>Choices</HeaderText>
-							{choices}
-						</div>
-						: null
-				}
-			</div>
-		);
-	} catch (ex) {
-		console.error(ex);
-		return null;
-	}
-};
-
-interface CareerSectionProps {
-	hero: Hero;
-	sourcebooks: Sourcebook[];
-	searchTerm: string;
-	selectCareer: (career: Career | null) => void;
-	selectIncitingIncident: (id: string | null) => void;
-	setFeatureData: (featureID: string, data: FeatureData) => void;
-}
-
-const CareerSection = (props: CareerSectionProps) => {
-	try {
-		const careers = SourcebookLogic.getCareers(props.sourcebooks).filter(c => matchElement(c, props.searchTerm));
-		const options = careers.map(c => (
-			<SelectablePanel key={c.id} onSelect={() => props.selectCareer(c)}>
-				<CareerPanel career={c} />
-			</SelectablePanel>
-		));
-
-		let choices: ReactNode[] = [];
-		if (props.hero.career) {
-			choices = FeatureLogic.getFeaturesFromCareer(props.hero.career, props.hero)
-				.filter(f => FeatureLogic.isChoice(f))
-				.map(f => (
-					<SelectablePanel key={f.id}>
-						<FeaturePanel feature={f} mode={PanelMode.Full} hero={props.hero} sourcebooks={props.sourcebooks} setData={props.setFeatureData} />
-					</SelectablePanel>
-				));
-
-			choices.push(
-				<SelectablePanel key='inciting-incident'>
-					<HeaderText>Inciting Incident</HeaderText>
-					<div className='ds-text'>Choose an inciting incident.</div>
-					<Select
-						style={{ width: '100%' }}
-						className={props.hero.career.incitingIncidents.selectedID === null ? 'selection-empty' : ''}
-						allowClear={true}
-						placeholder='Select'
-						options={props.hero.career.incitingIncidents.options.map(s => ({ value: s.id, label: s.name, desc: s.description }))}
-						optionRender={option => <Field label={option.data.label} value={option.data.desc} />}
-						value={props.hero.career.incitingIncidents.selectedID}
-						onChange={props.selectIncitingIncident}
-					/>
-					{props.hero.career.incitingIncidents.options.filter(i => i.id === props.hero.career!.incitingIncidents.selectedID).map(i => <Field key={i.id} label={i.name} value={i.description} />)}
-				</SelectablePanel>
-			);
-		}
-
-		return (
-			<div className='hero-edit-content'>
-				{
-					props.hero.career ?
-						<div className='hero-edit-content-column selected' id='career-selected'>
-							<SelectablePanel showShadow={false} action={{ label: 'Unselect', onClick: () => props.selectCareer(null) }}>
-								<CareerPanel career={props.hero.career} mode={PanelMode.Full} />
-							</SelectablePanel>
-						</div>
-						: null
-				}
-				{
-					!props.hero.career && (options.length > 0) ?
-						<div className='hero-edit-content-column grid' id='career-list'>
-							{options}
-						</div>
-						: null
-				}
-				{
-					!props.hero.career && (options.length === 0) ?
-						<div className='hero-edit-content-column' id='career-list'>
-							<EmptyMessage hero={props.hero} />
-						</div>
-						: null
-				}
-				{
-					choices.length > 0 ?
-						<div className='hero-edit-content-column choices' id='career-choices'>
-							<HeaderText>Choices</HeaderText>
-							{choices}
-						</div>
-						: null
-				}
-			</div>
-		);
-	} catch (ex) {
-		console.error(ex);
-		return null;
-	}
-};
 
 interface ClassSectionProps {
 	hero: Hero;
@@ -979,74 +557,6 @@ const ClassSection = (props: ClassSectionProps) => {
 	}
 };
 
-interface ComplicationSectionProps {
-	hero: Hero;
-	sourcebooks: Sourcebook[];
-	searchTerm: string;
-	selectComplication: (complication: Complication | null) => void;
-	setFeatureData: (featureID: string, data: FeatureData) => void;
-}
-
-const ComplicationSection = (props: ComplicationSectionProps) => {
-	try {
-		const complications = SourcebookLogic.getComplications(props.sourcebooks).filter(c => matchElement(c, props.searchTerm));
-		const options = complications.map(c => (
-			<SelectablePanel key={c.id} onSelect={() => props.selectComplication(c)}>
-				<ComplicationPanel complication={c} />
-			</SelectablePanel>
-		));
-
-		let choices: ReactNode[] = [];
-		if (props.hero.complication) {
-			choices = FeatureLogic.getFeaturesFromComplication(props.hero.complication, props.hero)
-				.filter(f => FeatureLogic.isChoice(f))
-				.map(f => (
-					<SelectablePanel key={f.id}>
-						<FeaturePanel feature={f} mode={PanelMode.Full} hero={props.hero} sourcebooks={props.sourcebooks} setData={props.setFeatureData} />
-					</SelectablePanel>
-				));
-		}
-
-		return (
-			<div className='hero-edit-content'>
-				{
-					props.hero.complication ?
-						<div className='hero-edit-content-column selected' id='complication-selected'>
-							<SelectablePanel showShadow={false} action={{ label: 'Unselect', onClick: () => props.selectComplication(null) }}>
-								<ComplicationPanel complication={props.hero.complication} mode={PanelMode.Full} />
-							</SelectablePanel>
-						</div>
-						: null
-				}
-				{
-					!props.hero.complication && (options.length > 0) ?
-						<div className='hero-edit-content-column grid' id='complication-list'>
-							{options}
-						</div>
-						: null
-				}
-				{
-					!props.hero.complication && (options.length === 0) ?
-						<div className='hero-edit-content-column' id='complication-list'>
-							<EmptyMessage hero={props.hero} />
-						</div>
-						: null
-				}
-				{
-					choices.length > 0 ?
-						<div className='hero-edit-content-column choices' id='complication-choices'>
-							<HeaderText>Choices</HeaderText>
-							{choices}
-						</div>
-						: null
-				}
-			</div>
-		);
-	} catch (ex) {
-		console.error(ex);
-		return null;
-	}
-};
 
 interface DetailsSectionProps {
 	hero: Hero;
@@ -1109,18 +619,6 @@ const DetailsSection = (props: DetailsSectionProps) => {
 						value={props.hero.settingIDs}
 						onChange={props.setSettingIDs}
 					/>
-					{
-						props.hero.features.filter(f => f.id === 'default-language').map(f => (
-							<FeaturePanel
-								key={f.id}
-								feature={f}
-								hero={props.hero}
-								sourcebooks={props.sourcebooks}
-								mode={PanelMode.Full}
-								setData={props.setFeatureData}
-							/>
-						))
-					}
 				</div>
 				<div className='hero-edit-content-column choices' id='details-features'>
 					<HeaderText>Customize</HeaderText>
