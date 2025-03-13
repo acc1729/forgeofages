@@ -64,6 +64,7 @@ export class SourcebookData {
 		],
 		classes: [
 			ClassData.barbarian,
+			ClassData.cleric,
 		],
 		complications: [
 			ComplicationData.advancedStudies,
