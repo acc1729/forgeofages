@@ -12,7 +12,7 @@ export const cleric: HeroClass = {
 **Backgrounds:** Possible backgrounds include: healer, archivist, military chaplain, temple guard, bartender, reformed thief, dwarven hierophant, initiate, and bishop.
 
 **Gear:** At 1st level, a cleric starts with a melee weapon, decent armor, a holy symbol, and other minor possessions suggested by their backgrounds. They might even have a crossbow.`,
-	primaryCharacteristics: [Characteristic.Strength, Characteristic.Constitution],
+	primaryCharacteristics: [Characteristic.Strength, Characteristic.Wisdom],
 	featuresByLevel: [
 		{
 			level: 1,
@@ -68,14 +68,28 @@ There are certain abilities specific to the cleric that can affect their powers:
 			description: `
 When you cast a spell that lets you or an ally heal using a recovery, the target also adds hit points equal to double your level to the recovery.
 
-**Invocation of Healing:** This battle, you gain an additional use of the heal spell. The first heal spell you cast after using this invocation allows the target to heal using a free recovery instead of spending a recovery.
-
-**Adventurer Feat:** When you cast a spell that allows an ally to heal using a recovery, you can let them use one of your recoveries instead. (If you also have the Protection/Community domain, any nearby ally can expend the recovery instead of you.)
-
-**Champion Feat:** The invocation of healing gives you two additional uses of heal this battle instead of only one.
-
-**Epic Feat:** Increase the additional hit points the target heals to triple your level.`,
+**Invocation of Healing:** This battle, you gain an additional use of the heal spell. The first heal spell you cast after using this invocation allows the target to heal using a free recovery instead of spending a recovery.`,
 			tier: Tier.Adventurer,
+			feats: [
+				FactoryLogic.createFeat({
+					id: 'cleric-domain-healing-feat-a',
+					name: 'Feat: Healing Domain A',
+					tier: Tier.Adventurer,
+					description: `When you cast a spell that allows an ally to heal using a recovery, you can let them use one of your recoveries instead. (If you also have the Protection/Community domain, any nearby ally can expend the recovery instead of you.)`,
+				}),
+				FactoryLogic.createFeat({
+					id: 'cleric-domain-healing-feat-c',
+					name: 'Feat: Healing Domain C',
+					tier: Tier.Champion,
+					description: `The invocation of healing gives you two additional uses of heal this battle instead of only one.`,
+				}),
+				FactoryLogic.createFeat({
+					id: 'cleric-domain-healing-feat-e',
+					name: 'Feat: Healing Domain E',
+					tier: Tier.Epic,
+					description: `Increase the additional hit points the target heals to triple your level.`,
+				}),
+			]
 		}),
 		FactoryLogic.createTalent({
 			id: 'cleric-domain-justice-vengeance',

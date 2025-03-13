@@ -47,6 +47,7 @@ import { SubClass } from '../models/subclass';
 import { Talent } from '../models/talent';
 import { Title } from '../models/title';
 import { Utils } from '../utils/utils';
+import { Feat } from '../models/feat';
 
 export class FactoryLogic {
 	static createElement = (name?: string): Element => {
@@ -72,7 +73,7 @@ export class FactoryLogic {
 				FactoryLogic.feature.createLanguageChoice({
 					id: 'default-language',
 					name: 'Default Language',
-					selected: [ 'Caelian' ]
+					selected: ['Caelian']
 				})
 			],
 			state: {
@@ -168,7 +169,7 @@ export class FactoryLogic {
 			name: '',
 			description: '',
 			primaryCharacteristics: [],
-			featuresByLevel: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ].map(n => ({ level: n, features: [] })),
+			featuresByLevel: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => ({ level: n, features: [] })),
 			abilities: [],
 			talents: [],
 			level: 1,
@@ -181,7 +182,7 @@ export class FactoryLogic {
 			id: Utils.guid(),
 			name: '',
 			description: '',
-			featuresByLevel: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ].map(n => ({ level: n, features: [], optionalFeatures: [] })),
+			featuresByLevel: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => ({ level: n, features: [], optionalFeatures: [] })),
 			selected: false
 		};
 	};
@@ -200,7 +201,7 @@ export class FactoryLogic {
 			id: Utils.guid(),
 			name: '',
 			description: '',
-			featuresByLevel: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ].map(n => ({ level: n, features: [], optionalFeatures: [] })),
+			featuresByLevel: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => ({ level: n, features: [], optionalFeatures: [] })),
 			piety: ''
 		};
 	};
@@ -308,7 +309,7 @@ export class FactoryLogic {
 			description: data.description || '',
 			itemPrerequisites: data.prerequisites || '',
 			source: data.source || '',
-			characteristic: data.characteristic || [ Characteristic.Reason ],
+			characteristic: data.characteristic || [Characteristic.Reason],
 			goal: data.goal || 0,
 			effect: data.effect || '',
 			progress: null
@@ -412,9 +413,9 @@ export class FactoryLogic {
 			name: '',
 			roles: [],
 			organizations: [],
-			level: [ minLevel, maxLevel ],
-			size: [ 1, 3 ],
-			ev: [ 0, 120 ]
+			level: [minLevel, maxLevel],
+			size: [1, 3],
+			ev: [0, 120]
 		};
 	};
 
@@ -471,7 +472,7 @@ export class FactoryLogic {
 			name: '',
 			description: '',
 			scene: '',
-			sections: [ FactoryLogic.createMontageSection() ],
+			sections: [FactoryLogic.createMontageSection()],
 			outcomes: {
 				totalSuccess: '',
 				partialSuccess: '',
@@ -595,7 +596,7 @@ export class FactoryLogic {
 		tier3: string
 	}): PowerRoll => {
 		return {
-			characteristic: data.characteristic ? Array.isArray(data.characteristic) ? data.characteristic : [ data.characteristic ] : [],
+			characteristic: data.characteristic ? Array.isArray(data.characteristic) ? data.characteristic : [data.characteristic] : [],
 			bonus: data.bonus ?? 0,
 			tier1: data.tier1,
 			tier2: data.tier2,
@@ -609,6 +610,7 @@ export class FactoryLogic {
 		description: string,
 		tier?: Tier,
 		cost?: number,
+		feats?: Feat[],
 	}): Talent => {
 		return {
 			id: data.id,
@@ -616,8 +618,23 @@ export class FactoryLogic {
 			description: data.description,
 			tier: data.tier || Tier.Adventurer,
 			cost: data.cost || 1,
+			feats: data.feats || [],
 		};
 	};
+
+	static createFeat = (data: {
+		id: string,
+		name: string,
+		description: string,
+		tier?: Tier,
+	}): Feat => {
+		return {
+			id: data.id,
+			name: data.name,
+			description: data.description,
+			tier: data.tier || Tier.Adventurer,
+		}
+	}
 
 	static damageModifier = {
 		create: (data: { damageType: string, modifierType: DamageModifierType, value: number }): DamageModifier => {
@@ -765,7 +782,7 @@ export class FactoryLogic {
 				qualifier: data.qualifier ?? ''
 			};
 		},
-		createSelf: (qualifier=''): AbilityDistance => {
+		createSelf: (qualifier = ''): AbilityDistance => {
 			return {
 				type: AbilityDistanceType.Self,
 				value: 0,
@@ -951,7 +968,7 @@ export class FactoryLogic {
 				}
 			};
 		},
-		createCompanion: (data: {id: string, name?: string, description?: string, type: 'companion' | 'mount' | 'retainer' }): FeatureCompanion => {
+		createCompanion: (data: { id: string, name?: string, description?: string, type: 'companion' | 'mount' | 'retainer' }): FeatureCompanion => {
 			return {
 				id: data.id,
 				name: data.name || Format.capitalize(data.type),
@@ -1010,7 +1027,7 @@ export class FactoryLogic {
 				description: data.description || '',
 				type: FeatureType.ItemChoice,
 				data: {
-					types: data.types || [ ItemType.Artifact, ItemType.Consumable, ItemType.Leveled, ItemType.Trinket ],
+					types: data.types || [ItemType.Artifact, ItemType.Consumable, ItemType.Leveled, ItemType.Trinket],
 					count: count,
 					selected: []
 				}
@@ -1111,7 +1128,7 @@ export class FactoryLogic {
 				description: data.description || '',
 				type: FeatureType.Perk,
 				data: {
-					lists: data.lists || [ PerkList.Crafting, PerkList.Exploration, PerkList.Interpersonal, PerkList.Intrigue, PerkList.Lore, PerkList.Supernatural ],
+					lists: data.lists || [PerkList.Crafting, PerkList.Exploration, PerkList.Interpersonal, PerkList.Intrigue, PerkList.Lore, PerkList.Supernatural],
 					count: count,
 					selected: []
 				}
@@ -1162,12 +1179,12 @@ export class FactoryLogic {
 				}
 			};
 		},
-		createSoloMonster: (data: { id: string, name: string, gender?: 'm' | 'f' | 'n' , endEfect?: number }): FeatureText => {
+		createSoloMonster: (data: { id: string, name: string, gender?: 'm' | 'f' | 'n', endEfect?: number }): FeatureText => {
 			const capitalizedName = data.name.split(' ').map((n, i) => i === 0 ? Format.capitalize(n) : n).join(' ');
 			const genderWithDefault = data.gender ?? 'n';
-			const heSheThey = ({ m: 'he', f: 'she', n: 'they' } as const)[ genderWithDefault ];
-			const hisHerTheir = ({ m: 'his', f: 'her', n: 'their' } as const)[ genderWithDefault ];
-			const himHerThem = ({ m: 'him', f: 'her', n: 'them' } as const)[ genderWithDefault ];
+			const heSheThey = ({ m: 'he', f: 'she', n: 'they' } as const)[genderWithDefault];
+			const hisHerTheir = ({ m: 'his', f: 'her', n: 'their' } as const)[genderWithDefault];
+			const himHerThem = ({ m: 'him', f: 'her', n: 'them' } as const)[genderWithDefault];
 			return {
 				id: data.id,
 				name: 'Solo Monster',
