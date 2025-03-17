@@ -42,7 +42,7 @@ export const BackgroundsPanel = (props: Props) => {
 	}
 
 	try {
-		let className = 'ability-panel';
+		let className = 'backgrounds-panel';
 		if (props.mode !== PanelMode.Full) {
 			className += ' compact';
 		}

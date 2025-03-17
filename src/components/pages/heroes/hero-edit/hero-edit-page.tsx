@@ -20,6 +20,8 @@ import { HeaderText } from '../../../controls/header-text/header-text';
 import { HeroClass } from '../../../../models/class';
 import { HeroCustomizePanel } from '../../../panels/hero-customize/hero-customize-panel';
 import { HeroLogic } from '../../../../logic/hero-logic';
+import { IconRelationship } from '../../../../models/icon-relationships';
+import { IconRelationshipsPanel } from '../../../panels/elements/icon-relationships-panel/icon-relationships-panel';
 import { NameGenerator } from '../../../../utils/name-generator';
 import { NumberSpin } from '../../../controls/number-spin/number-spin';
 import { PanelMode } from '../../../../enums/panel-mode';
@@ -183,6 +185,13 @@ export const HeroEditPage = (props: Props) => {
 			setDirty(true);
 		};
 
+		const setIconRelationships = (value: IconRelationship[]) => {
+			const heroCopy = Utils.copy(hero);
+			heroCopy.iconRelationships = value;
+			setHero(heroCopy);
+			setDirty(true);
+		};
+
 		const setFolder = (value: string) => {
 			const heroCopy = Utils.copy(hero);
 			heroCopy.folder = value;
@@ -262,6 +271,7 @@ export const HeroEditPage = (props: Props) => {
 							setName={setName}
 							setOneUniqueThing={setOneUniqueThing}
 							setBackgrounds={setBackgrounds}
+							setIconRelationships={setIconRelationships}
 							setFolder={setFolder}
 							setSettingIDs={setSettingIDs}
 							addFeature={addFeature}
@@ -578,6 +588,7 @@ interface DetailsSectionProps {
 	setName: (value: string) => void;
 	setOneUniqueThing: (value: string) => void;
 	setBackgrounds: (value: Background[]) => void;
+	setIconRelationships: (value: IconRelationship[]) => void;
 	setFolder: (value: string) => void;
 	setSettingIDs: (settingIDs: string[]) => void;
 	addFeature: (feature: Feature) => void;
@@ -615,9 +626,15 @@ const DetailsSection = (props: DetailsSectionProps) => {
 					/>
 					<HeaderText>Backgrounds</HeaderText>
 					<BackgroundsPanel
-						mode={PanelMode.Compact}
+						mode={PanelMode.Full}
 						backgrounds={props.hero.backgrounds}
 						setBackgrounds={props.setBackgrounds}
+					/>
+					<HeaderText>Icon Relationships</HeaderText>
+					<IconRelationshipsPanel
+						mode={PanelMode.Full}
+						iconRelationships={props.hero.iconRelationships}
+						setIconRelationships={props.setIconRelationships}
 					/>
 					<HeaderText>Folder</HeaderText>
 					<AutoComplete
