@@ -6,6 +6,8 @@ import { ReactNode, useMemo, useState } from 'react';
 import { Ancestry } from '../../../../models/ancestry';
 import { AncestryPanel } from '../../../panels/elements/ancestry-panel/ancestry-panel';
 import { AppHeader } from '../../../panels/app-header/app-header';
+import { Background } from '../../../../models/backgrounds';
+import { BackgroundsPanel } from '../../../panels/elements/backgrounds-panel/backgrounds-panel';
 import { Characteristic } from '../../../../enums/characteristic';
 import { ClassPanel } from '../../../panels/elements/class-panel/class-panel';
 import { Collections } from '../../../../utils/collections';
@@ -131,6 +133,13 @@ export const HeroEditPage = (props: Props) => {
 			setDirty(true);
 		};
 
+		const setBackgrounds = (value: Background[]) => {
+			const heroCopy = Utils.copy(hero);
+			heroCopy.backgrounds = value;
+			setHero(heroCopy);
+			setDirty(true);
+		};
+
 		const setCharacteristics = (array: { characteristic: Characteristic, value: number }[]) => {
 			const heroCopy = Utils.copy(hero);
 			if (heroCopy.class) {
@@ -238,6 +247,7 @@ export const HeroEditPage = (props: Props) => {
 							searchTerm={searchTerm}
 							selectClass={setClass}
 							setLevel={setLevel}
+							setBackgrounds={setBackgrounds}
 							selectCharacteristics={setCharacteristics}
 							setFeatureData={setFeatureData}
 						/>
@@ -251,6 +261,7 @@ export const HeroEditPage = (props: Props) => {
 							allSourcebooks={props.sourcebooks}
 							setName={setName}
 							setOneUniqueThing={setOneUniqueThing}
+							setBackgrounds={setBackgrounds}
 							setFolder={setFolder}
 							setSettingIDs={setSettingIDs}
 							addFeature={addFeature}
@@ -405,6 +416,7 @@ interface ClassSectionProps {
 	sourcebooks: Sourcebook[];
 	searchTerm: string;
 	selectClass: (heroClass: HeroClass | null) => void;
+	setBackgrounds: (value: Background[]) => void;
 	setLevel: (level: number) => void;
 	selectCharacteristics: (array: { characteristic: Characteristic, value: number }[]) => void;
 	setFeatureData: (featureID: string, data: FeatureData) => void;
@@ -565,6 +577,7 @@ interface DetailsSectionProps {
 	allSourcebooks: Sourcebook[];
 	setName: (value: string) => void;
 	setOneUniqueThing: (value: string) => void;
+	setBackgrounds: (value: Background[]) => void;
 	setFolder: (value: string) => void;
 	setSettingIDs: (settingIDs: string[]) => void;
 	addFeature: (feature: Feature) => void;
@@ -599,6 +612,12 @@ const DetailsSection = (props: DetailsSectionProps) => {
 						allowClear={true}
 						value={props.hero.oneUniqueThing}
 						onChange={e => props.setOneUniqueThing(e.target.value)}
+					/>
+					<HeaderText>Backgrounds</HeaderText>
+					<BackgroundsPanel
+						mode={PanelMode.Compact}
+						backgrounds={props.hero.backgrounds}
+						setBackgrounds={props.setBackgrounds}
 					/>
 					<HeaderText>Folder</HeaderText>
 					<AutoComplete

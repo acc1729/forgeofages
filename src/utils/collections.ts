@@ -20,6 +20,12 @@ export class Collections {
 		});
 	};
 
+	static sortNumeric = <T>(collection: T[], key: (item: T) => number) => {
+		return collection.sort((a, b) => {
+			return key(a) - key(b);
+		});
+	};
+
 	static shuffle = <T>(collection: T[], rng: () => number = Math.random) => {
 		let currentIndex = collection.length;
 		while (currentIndex !== 0) {

@@ -49,8 +49,8 @@ export interface Hero {
 	folder: string;
 	settingIDs: string[];
 
-	// characteristics: Characteristic | null;
 	ancestry: Ancestry | null;
+	backgrounds: Background[];
 	culture: Culture | null;
 	class: HeroClass | null;
 	career: Career | null;
