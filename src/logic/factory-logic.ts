@@ -62,6 +62,9 @@ export class FactoryLogic {
 		return {
 			id: Utils.guid(),
 			name: '',
+			oneUniqueThing: '',
+			backgrounds: [],
+			iconRelationships: [],
 			folder: '',
 			settingIDs: sourcebookIDs,
 			ancestry: null,

@@ -9,8 +9,7 @@
 
 ### Hero Sheet
 
-* Display Hero Backgrounds
-* Display Icon Relationships
+* Make attributes and bonuses table not look way too big
 
 ### Hero Builder
 

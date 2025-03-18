@@ -56,9 +56,7 @@ export const IconRelationshipsPanel = (props: Props) => {
 
 	const changeIconRelationshipDirection = (index: number) => {
 		let irs = iconRelationships;
-		console.log(irs);
 		irs[index].direction = toggleDirection(irs[index].direction);
-		console.log(irs);
 		props.setIconRelationships(irs);
 	}
 

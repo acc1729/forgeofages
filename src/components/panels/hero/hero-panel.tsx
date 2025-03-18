@@ -12,10 +12,7 @@ import { Complication } from '../../../models/complication';
 import { ConditionLogic } from '../../../logic/condition-logic';
 import { ConditionType } from '../../../enums/condition-type';
 import { Culture } from '../../../models/culture';
-import { CultureData } from '../../../data/culture-data';
-import { DamageModifierType } from '../../../enums/damage-modifier-type';
 import { Domain } from '../../../models/domain';
-import { Element } from '../../../models/element';
 import { FeaturePanel } from '../elements/feature-panel/feature-panel';
 import { FeatureType } from '../../../enums/feature-type';
 import { Field } from '../../controls/field/field';
@@ -30,8 +27,6 @@ import { MonsterLogic } from '../../../logic/monster-logic';
 import { Options } from '../../../models/options';
 import { PanelMode } from '../../../enums/panel-mode';
 import { SelectablePanel } from '../../controls/selectable-panel/selectable-panel';
-import { Skill } from '../../../models/skill';
-import { SkillList } from '../../../enums/skill-list';
 import { Sourcebook } from '../../../models/sourcebook';
 import { useMediaQuery } from '../../../hooks/use-media-query';
 
@@ -66,18 +61,6 @@ export const HeroPanel = (props: Props) => {
 			}
 		};
 
-		const onSelectCulture = () => {
-			if (props.hero.culture && props.onSelectCulture) {
-				props.onSelectCulture(props.hero.culture);
-			}
-		};
-
-		const onSelectCareer = () => {
-			if (props.hero.career && props.onSelectCareer) {
-				props.onSelectCareer(props.hero.career);
-			}
-		};
-
 		const onSelectClass = () => {
 			if (props.hero.class && props.onSelectClass) {
 				props.onSelectClass(props.hero.class);
@@ -108,49 +91,17 @@ export const HeroPanel = (props: Props) => {
 			}
 		};
 
-		let incitingIncident: Element | null = null;
-		if (props.hero.career && props.hero.career.incitingIncidents.selectedID) {
-			incitingIncident = props.hero.career.incitingIncidents.options.find(o => o.id === props.hero.career?.incitingIncidents.selectedID) || null;
-		}
-
 		return (
 			<div className={showBorder ? 'hero-left-column border' : 'hero-left-column'}>
 				{
 					props.hero.ancestry ?
 						<div className='overview-tile clickable' onClick={onSelectAncestry}>
-							<HeaderText>Ancestry</HeaderText>
-							<Field label='Ancestry' value={props.hero.ancestry.name} />
-							{HeroLogic.getFormerAncestries(props.hero).map(a => <Field key={a.id} label='Former Life' value={a.name} />)}
+							<HeaderText>Kin</HeaderText>
+							<Field label='Kin' value={props.hero.ancestry.name} />
 						</div>
 						:
 						<div className='overview-tile'>
-							<div className='ds-text dimmed-text'>No ancestry chosen</div>
-						</div>
-				}
-				{
-					props.hero.culture ?
-						<div className='overview-tile clickable' onClick={onSelectCulture}>
-							<HeaderText>Culture</HeaderText>
-							{props.hero.culture.id !== CultureData.bespoke.id ? <Field label='Culture' value={props.hero.culture.name} /> : null}
-							{props.hero.culture.environment ? <Field label='Environment' value={props.hero.culture.environment.name} /> : null}
-							{props.hero.culture.organization ? <Field label='Organization' value={props.hero.culture.organization.name} /> : null}
-							{props.hero.culture.upbringing ? <Field label='Upbringing' value={props.hero.culture.upbringing.name} /> : null}
-						</div>
-						:
-						<div className='overview-tile'>
-							<div className='ds-text dimmed-text'>No culture chosen</div>
-						</div>
-				}
-				{
-					props.hero.career ?
-						<div className='overview-tile clickable' onClick={onSelectCareer}>
-							<HeaderText>Career</HeaderText>
-							<Field label='Career' value={props.hero.career.name} />
-							{incitingIncident ? <Field label='Inciting Incident' value={incitingIncident.name} /> : null}
-						</div>
-						:
-						<div className='overview-tile'>
-							<div className='ds-text dimmed-text'>No career chosen</div>
+							<div className='ds-text dimmed-text'>No kin chosen</div>
 						</div>
 				}
 				{
@@ -214,63 +165,44 @@ export const HeroPanel = (props: Props) => {
 	};
 
 	const getRightColumn = (showBorder: boolean) => {
-		const immunities = HeroLogic.getDamageModifiers(props.hero, DamageModifierType.Immunity);
-		const weaknesses = HeroLogic.getDamageModifiers(props.hero, DamageModifierType.Weakness);
-
-		const sourcebooks = props.sourcebooks.filter(cs => props.hero.settingIDs.includes(cs.id));
-
-		const getSkills = (label: string, skills: Skill[]) => {
-			return skills.length > 0 ?
-				<div key={label} className='overview-tile'>
-					<HeaderText>{label}</HeaderText>
-					{skills.map(s => <div key={s.name} className='ds-text'>{s.name}</div>)}
-				</div>
-				:
-				<div key={label} className='overview-tile'>
-					<HeaderText>{label}</HeaderText>
-					<div className='ds-text dimmed-text'>None</div>
-				</div>;
-		};
-
 		return (
 			<div className={showBorder ? 'hero-right-column border' : 'hero-right-column'}>
-				{
-					immunities.length > 0 ?
-						<div className='overview-tile'>
-							<HeaderText>Immunities</HeaderText>
-							{immunities.map((dm, n) => <div key={n} className='ds-text damage-modifier'><span>{dm.damageType}</span><span>{dm.value}</span></div>)}
-						</div>
-						: null
-				}
-				{
-					weaknesses.length > 0 ?
-						<div className='overview-tile'>
-							<HeaderText>Weaknesses</HeaderText>
-							{weaknesses.map((dm, n) => <div key={n} className='ds-text damage-modifier'><span>{dm.damageType}</span><span>{dm.value}</span></div>)}
-						</div>
-						: null
-				}
 				<div className='overview-tile'>
-					<HeaderText>Languages</HeaderText>
+					<HeaderText>One Unique Thing</HeaderText>
+					<div className='ds-text'>{props.hero.oneUniqueThing}</div>
+				</div>
+				<div className='overview-tile'>
+					<HeaderText>Backgrounds</HeaderText>
 					{
-						HeroLogic.getLanguages(props.hero, sourcebooks).length > 0 ?
-							HeroLogic.getLanguages(props.hero, sourcebooks).map(l => <div key={l.name} className='ds-text'>{l.name}</div>)
+						props.hero.backgrounds.length > 0 ? 
+							props.hero.backgrounds.map(bg => (
+								<div key={bg.background} className='ds-text'>{bg.background} +{bg.value}</div>
+							))
 							:
 							<div className='ds-text dimmed-text'>None</div>
 					}
 				</div>
-				{
-					(props.options?.showSkillsInGroups || false) ?
-						[ SkillList.Crafting, SkillList.Exploration, SkillList.Interpersonal, SkillList.Intrigue, SkillList.Lore ]
-							.map(list => getSkills(`${list} Skills`, HeroLogic.getSkills(props.hero, sourcebooks).filter(s => s.list === list)))
-						:
-						getSkills('Skills', HeroLogic.getSkills(props.hero, sourcebooks))
-				}
+				<div className='overview-tile'>
+					<HeaderText>Icon Relationships</HeaderText>
+					{
+						props.hero.iconRelationships.length > 0 ? 
+							props.hero.iconRelationships.map(ir => (
+								<div>
+									<div key={ir.icon} className='ds-text'>{ir.icon}</div>
+									<div key={ir.icon} className='ds-text bold-text small-text uppercase'>{ir.direction } {ir.value}</div>
+								</div>
+							))
+							:
+							<div className='ds-text dimmed-text'>None</div>
+					}
+				</div>
 			</div>
 		);
 	};
 
 	const getStatsSection = () => {
+		if (!props.hero.class) return null;
+
 		const sizeSmall = {
 			xs: 24,
 			sm: 24,
@@ -289,14 +221,6 @@ export const HeroPanel = (props: Props) => {
 			xxl: 7
 		};
 
-		const maxStamina = HeroLogic.getStamina(props.hero);
-		const stamina = props.hero.state.staminaDamage === 0 ? maxStamina : maxStamina - props.hero.state.staminaDamage;
-		const staminaSuffix = props.hero.state.staminaDamage === 0 ? null : `/ ${maxStamina}`;
-
-		const maxRecoveries = HeroLogic.getRecoveries(props.hero);
-		const recoveries = props.hero.state.recoveriesUsed === 0 ? maxRecoveries : maxRecoveries - props.hero.state.recoveriesUsed;
-		const recoveriesSuffix = props.hero.state.recoveriesUsed === 0 ? null : `/ ${maxRecoveries}`;
-
 		const onSelectCharacteristic = (characteristic: Characteristic) => {
 			if (props.onSelectCharacteristic) {
 				props.onSelectCharacteristic(characteristic);
@@ -309,22 +233,11 @@ export const HeroPanel = (props: Props) => {
 			}
 		};
 
-		const onShowVitals = () => {
-			if (props.onShowState) {
-				props.onShowState(HeroStatePage.Vitals);
-			}
-		};
-
-		const onShowStats = () => {
-			if (props.onShowState) {
-				props.onShowState(HeroStatePage.Stats);
-			}
-		};
-
 		return (
 			<Row gutter={[ 16, 16 ]}>
 				<Col span={24}>
 					<div className='characteristics-box'>
+						<div className='characteristic'>Attributes</div>
 						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Strength)}>
 							<Statistic title='Strength' value={HeroLogic.getCharacteristic(props.hero, Characteristic.Strength)} />
 						</div>
@@ -345,61 +258,62 @@ export const HeroPanel = (props: Props) => {
 						</div>
 					</div>
 				</Col>
-				<Col xs={sizeLarge.xs} sm={sizeLarge.sm} md={sizeLarge.md} lg={sizeLarge.lg} xl={sizeLarge.xl} xxl={sizeLarge.xxl}>
+				<Col span={24}>
 					<div className='characteristics-box'>
-						<div className='characteristic'>
-							<Statistic title='Size' value={FormatLogic.getSize(HeroLogic.getSize(props.hero))} />
+						<div className='characteristic'>Bonus</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Strength)}>
+							<Statistic title='Strength' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Strength))} />
 						</div>
-						<div className='characteristic'>
-							<Statistic title='Speed' value={HeroLogic.getSpeed(props.hero)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Constitution)}>
+							<Statistic title='Constitution' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Constitution))} />
 						</div>
-						<div className='characteristic'>
-							<Statistic title='Stability' value={HeroLogic.getStability(props.hero)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Dexterity)}>
+							<Statistic title='Dexterity' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Dexterity))} />
 						</div>
-						<div className='characteristic'>
-							<Statistic title='Disengage' value={HeroLogic.getDisengage(props.hero)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Intelligence)}>
+							<Statistic title='Intelligence' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Intelligence))} />
+						</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Wisdom)}>
+							<Statistic title='Wisdom' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Wisdom))} />
+						</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Charisma)}>
+							<Statistic title='Charisma' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Charisma))} />
 						</div>
 					</div>
 				</Col>
-				<Col xs={sizeSmall.xs} sm={sizeSmall.sm} md={sizeSmall.md} lg={sizeSmall.lg} xl={sizeSmall.xl} xxl={sizeSmall.xxl}>
-					<div className='characteristics-box clickable' onClick={onShowStats}>
-						<div className='characteristic'>
-							<Statistic title='Hero Tokens' value={props.hero.state.heroTokens} />
+				<Col span={24}>
+					<div className='characteristics-box'>
+						<div className='characteristic'>Bonus + Level</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Strength)}>
+							<Statistic title='Strength' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Strength) + props.hero.class.level)} />
 						</div>
-						<div className='characteristic'>
-							<Statistic title='Renown' value={HeroLogic.getRenown(props.hero)} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Constitution)}>
+							<Statistic title='Constitution' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Constitution) + props.hero.class.level)} />
 						</div>
-						<div className='characteristic'>
-							<Statistic title='Wealth' value={props.hero.state.wealth} />
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Dexterity)}>
+							<Statistic title='Dexterity' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Dexterity) + props.hero.class.level)} />
+						</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Intelligence)}>
+							<Statistic title='Intelligence' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Intelligence) + props.hero.class.level)} />
+						</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Wisdom)}>
+							<Statistic title='Wisdom' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Wisdom) + props.hero.class.level)} />
+						</div>
+						<div className='characteristic clickable' onClick={() => onSelectCharacteristic(Characteristic.Charisma)}>
+							<Statistic title='Charisma' value={FormatLogic.getBonus(HeroLogic.getCharacteristicBonus(props.hero, Characteristic.Charisma) + props.hero.class.level)} />
 						</div>
 					</div>
 				</Col>
 				<Col xs={sizeLarge.xs} sm={sizeLarge.sm} md={sizeLarge.md} lg={sizeLarge.lg} xl={sizeLarge.xl} xxl={sizeLarge.xxl}>
 					<div className='characteristics-box clickable' onClick={onShowHero}>
 						<div className='characteristic'>
-							<Statistic title={props.hero.class ? props.hero.class.heroicResource : 'Resource'} value={props.hero.state.heroicResource} />
+							<Statistic title='Placeholder' value={0} />
 						</div>
 						<div className='characteristic'>
-							<Statistic title='Surges' value={props.hero.state.surges} />
+							<Statistic title='Placeholder' value={0} />
 						</div>
 						<div className='characteristic'>
-							<Statistic title='Victories' value={props.hero.state.victories} />
-						</div>
-						<div className='characteristic'>
-							<Statistic title='XP' value={props.hero.state.xp} />
-						</div>
-					</div>
-				</Col>
-				<Col xs={sizeSmall.xs} sm={sizeSmall.sm} md={sizeSmall.md} lg={sizeSmall.lg} xl={sizeSmall.xl} xxl={sizeSmall.xxl}>
-					<div className='characteristics-box clickable' onClick={onShowVitals}>
-						<div className='characteristic'>
-							<Statistic title='Stamina' value={stamina} suffix={staminaSuffix} />
-						</div>
-						<div className='characteristic'>
-							<Statistic title='Recoveries' value={recoveries} suffix={recoveriesSuffix} />
-						</div>
-						<div className='characteristic'>
-							<Statistic title='Recov Value' value={HeroLogic.getRecoveryValue(props.hero)} />
+							<Statistic title='Placeholder' value={0} />
 						</div>
 					</div>
 				</Col>

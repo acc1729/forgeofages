@@ -16,6 +16,12 @@ export class FormatLogic {
 			.join(' ');
 	};
 
+	static getBonus = (bonus: number): string => {
+		if (bonus > 0) return `+${bonus}`;
+		if (bonus < 0) return `${bonus}`;
+		return '-';
+	};
+	
 	static getSize = (size: Size) => {
 		if (size.value > 1) {
 			return size.value.toString();

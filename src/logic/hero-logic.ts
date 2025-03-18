@@ -396,6 +396,11 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		return value;
 	};
 
+	static getCharacteristicBonus = (hero: Hero, characteristic: Characteristic): number => {
+		const ch = HeroLogic.getCharacteristic(hero, characteristic);
+		return Math.floor(ch / 2) - 5;
+	}
+
 	static getLanguages = (hero: Hero, sourcebooks: Sourcebook[]) => {
 		const languageNames: string[] = [];
 

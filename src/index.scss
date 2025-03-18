@@ -167,6 +167,10 @@ p,
 		font-size: 10px;
 	}
 
+	&.uppercase {
+		text-transform: uppercase;
+	}
+
 	br {
 		content: '';
 		display: block;

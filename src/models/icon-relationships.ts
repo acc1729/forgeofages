@@ -1,9 +1,9 @@
 import { Element } from './element';
 
 export enum Direction {
-	Positive,
-	Conflicted,
-	Negative,
+	Positive = "Positive",
+	Conflicted = "Conflicted",
+	Negative = "Negative",
 }
 
 export interface IconRelationship {
