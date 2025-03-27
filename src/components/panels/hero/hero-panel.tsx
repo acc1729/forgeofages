@@ -13,6 +13,7 @@ import { ConditionLogic } from '../../../logic/condition-logic';
 import { ConditionType } from '../../../enums/condition-type';
 import { Culture } from '../../../models/culture';
 import { Domain } from '../../../models/domain';
+import { Feature } from '../../../models/feature';
 import { FeaturePanel } from '../elements/feature-panel/feature-panel';
 import { FeatureType } from '../../../enums/feature-type';
 import { Field } from '../../controls/field/field';
@@ -361,7 +362,9 @@ export const HeroPanel = (props: Props) => {
 
 		const features = HeroLogic.getFeatures(props.hero)
 			.filter(feature => featureTypes.includes(feature.type));
-		if (features.length === 0) {
+		const talents = HeroLogic.getTalents(props.hero) as unknown as Feature[];
+
+		if (features.length + talents.length === 0) {
 			return null;
 		}
 
@@ -370,7 +373,7 @@ export const HeroPanel = (props: Props) => {
 				{header ? <HeaderText level={1}>{header}</HeaderText> : null}
 				<div className='features-grid'>
 					{
-						features.map(feature => (
+						features.concat(talents).map(feature => (
 							<FeaturePanel
 								key={feature.id}
 								feature={feature}
@@ -521,7 +524,7 @@ export const HeroPanel = (props: Props) => {
 						<HeaderText level={1} tags={props.hero.folder ? [ props.hero.folder ] : []}>{props.hero.name || 'Unnamed Hero'}</HeaderText>
 						{getStatsSection()}
 						{getConditionsSection()}
-						{getFeaturesSection('Features')}
+						{getFeaturesSection('Features and Talents')}
 					</div>
 					{getRightColumn(true)}
 				</div>

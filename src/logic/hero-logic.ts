@@ -1,5 +1,5 @@
 import { Ability, AbilityDistance } from '../models/ability';
-import { Feature, FeatureAbilityData, FeatureBonusData, FeatureClassAbilityData, FeatureDamageModifierData, FeatureDomainData, FeatureItemChoice, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureSkillChoiceData, FeatureSkillData } from '../models/feature';
+import { Feature, FeatureAbilityData, FeatureBonusData, FeatureClassAbilityData, FeatureClassTalentData, FeatureDamageModifierData, FeatureDomainData, FeatureItemChoice, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureSkillChoiceData, FeatureSkillData } from '../models/feature';
 import { AbilityDistanceType } from '../enums/abiity-distance-type';
 import { AbilityKeyword } from '../enums/ability-keyword';
 import { Tier } from '../enums/tier';
@@ -22,6 +22,7 @@ import { Skill } from '../models/skill';
 import { Sourcebook } from '../models/sourcebook';
 import { SourcebookData } from '../data/sourcebook-data';
 import { SourcebookLogic } from './sourcebook-logic';
+import { Talent } from '../models/talent';
 
 export class HeroLogic {
 	static getKitTypes = (hero: Hero) => {
@@ -66,7 +67,7 @@ export class HeroLogic {
 		return domains;
 	};
 
-	static getFeatures = (hero: Hero) => {
+	static getFeatures = (hero: Hero): Feature[] => {
 		const features: Feature[] = [];
 
 		if (hero.ancestry) {
@@ -100,6 +101,25 @@ export class HeroLogic {
 		});
 
 		return Collections.sort(features, f => f.name);
+	};
+
+	static getTalents = (hero: Hero): Talent[] => {
+		const talents: Talent[] = [];
+
+		this.getFeatures(hero)
+			.filter(f => f.type === FeatureType.ClassTalent)
+			.forEach(f => {
+				console.log(f);
+				const data = f.data as FeatureClassTalentData;
+				data.selectedIDs.forEach(talentID => {
+					const talent = hero.class?.talents.find(a => a.id === talentID);
+					if (talent) {
+						talents.push(talent);
+					}
+				});
+			});
+
+		return talents;
 	};
 
 	static getAbilities = (hero: Hero, includeChoices: boolean, includeFreeStrikes: boolean, includeStandard: boolean) => {
