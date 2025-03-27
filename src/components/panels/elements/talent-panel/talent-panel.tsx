@@ -44,9 +44,11 @@ export const TalentPanel = (props: Props) => {
 			className += ' compact';
 		}
 
+		console.log(props);
+
 		return (
 			<div className={className} id={props.mode === PanelMode.Full ? props.talent.id : undefined}>
-				<HeaderText ribbon={(<Badge>Signature</Badge>)} tags={props.tags}>
+				<HeaderText tags={props.tags}>
 					{props.talent.name || 'Unnamed Talent'}
 				</HeaderText>
 				<Markdown text={props.talent.description} />

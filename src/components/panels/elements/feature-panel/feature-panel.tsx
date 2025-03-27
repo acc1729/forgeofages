@@ -1,5 +1,5 @@
 import { Alert, Button, Drawer, Input, Select, Space } from 'antd';
-import { Feature, FeatureAbilityCostData, FeatureAncestryChoiceData, FeatureAncestryFeatureChoiceData, FeatureBonusData, FeatureCharacteristicBonusData, FeatureChoiceData, FeatureClassAbilityData, FeatureClassTalentData, FeatureCompanionData, FeatureDamageModifierData, FeatureData, FeatureDomainData, FeatureDomainFeatureData, FeatureItemChoiceData, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureMaliceData, FeatureMultipleData, FeaturePerkData, FeatureSizeData, FeatureSkillChoiceData, FeatureSkillData, FeatureSpeedData, FeatureTitleChoiceData } from '../../../../models/feature';
+import { Feature, FeatureAbilityCostData, FeatureAncestryChoiceData, FeatureAncestryFeatureChoiceData, FeatureBonusData, FeatureCharacteristicBonusData, FeatureChoiceData, FeatureClassAbilityData, FeatureClassTalentData, FeatureCompanionData, FeatureDamageModifierData, FeatureData, FeatureDomainData, FeatureDomainFeatureData, FeatureFeatData, FeatureItemChoiceData, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureMaliceData, FeatureMultipleData, FeaturePerkData, FeatureSizeData, FeatureSkillChoiceData, FeatureSkillData, FeatureSpeedData, FeatureTitleChoiceData } from '../../../../models/feature';
 import { Ability } from '../../../../models/ability';
 import { AbilityPanel } from '../ability-panel/ability-panel';
 import { Ancestry } from '../../../../models/ancestry';
@@ -8,6 +8,7 @@ import { Badge } from '../../../controls/badge/badge';
 import { Collections } from '../../../../utils/collections';
 import { DomainPanel } from '../domain-panel/domain-panel';
 import { Expander } from '../../../controls/expander/expander';
+import { Feat } from '../../../../models/feat';
 import { FeatureLogic } from '../../../../logic/feature-logic';
 import { FeatureType } from '../../../../enums/feature-type';
 import { Field } from '../../../controls/field/field';
@@ -34,6 +35,7 @@ import { SourcebookLogic } from '../../../../logic/sourcebook-logic';
 import { Talent } from '../../../../models/talent';
 import { TalentPanel } from '../talent-panel/talent-panel';
 import { ThunderboltOutlined } from '@ant-design/icons';
+import { Tier, TierLabels } from '../../../../enums/tier';
 import { TitlePanel } from '../title-panel/title-panel';
 import { Utils } from '../../../../utils/utils';
 import { useState } from 'react';
@@ -591,6 +593,53 @@ export const FeaturePanel = (props: Props) => {
 		);
 	};
 
+	const getSelectionFeat = (data: FeatureFeatData) => {
+		if (!props.hero) {
+			return null;
+		}
+
+		const feats = HeroLogic.getAvailableFeats(props.hero, props.sourcebooks || [], data.tier);
+
+		if (feats.length === 0) {
+			return (
+				<Alert
+					type='warning'
+					showIcon={true}
+					message='There are no options to choose for this feature.'
+				/>
+			);
+		}
+
+		return (
+			<Space direction='vertical' style={{ width: '100%' }}>
+				<Select
+					style={{ width: '100%' }}
+					className={data.selected.length === 0 ? 'selection-empty' : ''}
+					allowClear={true}
+					placeholder={'Select a feat'}
+					options={feats.map(a => ({ label: a.name, value: a.id, desc: a.description, disabled: false }))}
+					optionRender={option => <Field disabled={option.data.disabled} label={option.data.label} value={option.data.desc} />}
+					value={data.selected.length > 0 ? data.selected[0].id : null}
+					onChange={(value: string) => {
+						const f = feats.find(o => o.id === value) as Feat;
+						const dataCopy = Utils.copy(data);
+						dataCopy.selected = [f];
+						if (props.setData) {
+							props.setData(props.feature.id, dataCopy);
+						}
+					}}
+				/>
+				{
+					data.selected.map(feat => {
+						return (
+							<FeaturePanel key={feat.id} feature={feat as unknown as Feature} mode={PanelMode.Full} />
+						);
+					})
+				}
+			</Space>
+		);
+	};
+
 	const getSelectionItemChoice = (data: FeatureItemChoiceData) => {
 		if (!props.hero) {
 			return null;
@@ -1061,6 +1110,8 @@ export const FeaturePanel = (props: Props) => {
 				return getSelectionDomain(props.feature.data);
 			case FeatureType.DomainFeature:
 				return getSelectionDomainFeature(props.feature.data);
+			case FeatureType.Feat:
+				return getSelectionFeat(props.feature.data);
 			case FeatureType.ItemChoice:
 				return getSelectionItemChoice(props.feature.data);
 			case FeatureType.Kit:
@@ -1263,6 +1314,24 @@ export const FeaturePanel = (props: Props) => {
 		}
 
 		return null;
+	};
+
+	const getInformationFeat = (data: FeatureFeatData) => {
+		if ((data.selected.length > 0) && props.hero && props.hero.class) {
+			const feats = HeroLogic.getAvailableFeats(props.hero, props.sourcebooks || []);
+			const selectedFeats = feats.filter(f => f.id === data.selected[0].id);
+			return (
+				<Space direction='vertical' style={{ width: '100%' }}>
+					{
+						selectedFeats.map(f => <FeaturePanel key={f.id} feature={f as unknown as Feature} mode={PanelMode.Full} />)
+					}
+				</Space>
+			);
+		} else {
+			return (
+				<div className='ds-text'>Choose a(n) {TierLabels[data.tier]} feat.</div>
+			);
+		}
 	};
 
 	const getInformationItemChoice = (data: FeatureItemChoiceData) => {
@@ -1514,6 +1583,8 @@ export const FeaturePanel = (props: Props) => {
 				return getInformationDomain(props.feature.data);
 			case FeatureType.DomainFeature:
 				return getInformationDomainFeature(props.feature.data);
+			case FeatureType.Feat:
+				return getInformationFeat(props.feature.data);
 			case FeatureType.ItemChoice:
 				return getInformationItemChoice(props.feature.data);
 			case FeatureType.Kit:

@@ -44,8 +44,12 @@ export const barbarian: HeroClass = {
 				FactoryLogic.feature.createClassTalentChoice({
 					id: 'barbarian-talents-1',
 					name: 'Barbarian Talents',
-					description: "Not sure? This is the 'createClassTalentChoice' call.",
+					description: "Choose three Barbarian talents.",
 					count: 3,
+					tier: Tier.Adventurer,
+				}),
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-1',
 					tier: Tier.Adventurer,
 				})
 			]

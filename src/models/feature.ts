@@ -5,6 +5,7 @@ import { Ancestry } from './ancestry';
 import { Characteristic } from '../enums/characteristic';
 import { Domain } from './domain';
 import { Element } from './element';
+import { Feat } from './feat';
 import { FeatureField } from '../enums/feature-field';
 import { FeatureType } from '../enums/feature-type';
 import { Item } from './item';
@@ -122,6 +123,12 @@ export interface FeatureDomainFeatureData extends _FeatureData {
 };
 export type FeatureDomainFeature = FeatureOf<FeatureType.DomainFeature, FeatureDomainFeatureData>;
 
+export interface FeatureFeatData extends _FeatureData {
+	tier: Tier;
+	selected: Feat[];
+}
+export type FeatureFeat = FeatureOf<FeatureType.Feat, FeatureFeatData>;
+
 export interface FeatureItemChoiceData extends _FeatureData {
 	types: ItemType[];
 	count: number;
@@ -204,7 +211,10 @@ export interface FeatureTalentData extends _FeatureData {
 };
 export type FeatureTalent = FeatureOf<FeatureType.Talent, FeatureTalentData>;
 
-export type FeatureText = FeatureOf<FeatureType.Text>;
+export interface FeatureTextData extends _FeatureData {
+	feats: Feat[],
+}
+export type FeatureText = FeatureOf<FeatureType.Text, FeatureTextData>;
 
 export interface FeatureTitleChoiceData extends _FeatureData {
 	echelon: number;
@@ -228,6 +238,7 @@ export type Feature =
 	| FeatureDamageModifier
 	| FeatureDomain
 	| FeatureDomainFeature
+	| FeatureFeat
 	| FeatureItemChoice
 	| FeatureKit
 	| FeatureKitType

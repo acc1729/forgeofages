@@ -161,6 +161,7 @@ export class FeatureLogic {
 			case FeatureType.Companion:
 			case FeatureType.Domain:
 			case FeatureType.DomainFeature:
+			case FeatureType.Feat:
 			case FeatureType.ItemChoice:
 			case FeatureType.Kit:
 			case FeatureType.LanguageChoice:

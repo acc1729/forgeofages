@@ -2,12 +2,12 @@ import { Ability, AbilityDistance } from '../models/ability';
 import { Feature, FeatureAbilityData, FeatureBonusData, FeatureClassAbilityData, FeatureClassTalentData, FeatureDamageModifierData, FeatureDomainData, FeatureItemChoice, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureSkillChoiceData, FeatureSkillData } from '../models/feature';
 import { AbilityDistanceType } from '../enums/abiity-distance-type';
 import { AbilityKeyword } from '../enums/ability-keyword';
-import { Tier } from '../enums/tier';
 import { Characteristic } from '../enums/characteristic';
 import { Collections } from '../utils/collections';
 import { DamageModifierType } from '../enums/damage-modifier-type';
 import { Domain } from '../models/domain';
 import { FactoryLogic } from './factory-logic';
+import { Feat } from '../models/feat';
 import { FeatureField } from '../enums/feature-field';
 import { FeatureLogic } from './feature-logic';
 import { FeatureType } from '../enums/feature-type';
@@ -23,6 +23,7 @@ import { Sourcebook } from '../models/sourcebook';
 import { SourcebookData } from '../data/sourcebook-data';
 import { SourcebookLogic } from './sourcebook-logic';
 import { Talent } from '../models/talent';
+import { Tier } from '../enums/tier';
 
 export class HeroLogic {
 	static getKitTypes = (hero: Hero) => {
@@ -67,6 +68,27 @@ export class HeroLogic {
 		return domains;
 	};
 
+	static getAvailableFeats = (hero: Hero, sourcebooks: Sourcebook[], tier?: Tier): Feat[] => {
+		let feats: Feat[] = [];
+		sourcebooks.flatMap(sb => sb.feats).forEach(f => feats.push(f));
+
+		const heroFeatures = HeroLogic.getFeatures(hero);
+		const heroTalents = HeroLogic.getTalents(hero);
+		heroFeatures
+			.filter(f => f.type === FeatureType.Text)
+			.flatMap(f => f.data.feats)
+			.forEach(f => feats.push(f));
+		heroTalents
+			.flatMap(f => f.feats)
+			.forEach(f => feats.push(f));
+
+		if (tier) {
+			feats = feats.filter(f => f.tier === tier)
+		}
+
+		return Collections.distinct(feats, a => a.name);
+	};
+
 	static getFeatures = (hero: Hero): Feature[] => {
 		const features: Feature[] = [];
 
@@ -109,7 +131,6 @@ export class HeroLogic {
 		this.getFeatures(hero)
 			.filter(f => f.type === FeatureType.ClassTalent)
 			.forEach(f => {
-				console.log(f);
 				const data = f.data as FeatureClassTalentData;
 				data.selectedIDs.forEach(talentID => {
 					const talent = hero.class?.talents.find(a => a.id === talentID);

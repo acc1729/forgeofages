@@ -4,6 +4,7 @@ import { Complication } from './complication';
 import { Culture } from './culture';
 import { Domain } from './domain';
 import { Element } from './element';
+import { Feat } from './feat';
 import { HeroClass } from './class';
 import { Item } from './item';
 import { Kit } from './kit';
@@ -23,6 +24,7 @@ export interface Sourcebook extends Element {
 	classes: HeroClass[];
 	complications: Complication[];
 	domains: Domain[];
+	feats: Feat[];
 	kits: Kit[];
 	perks: Perk[];
 	titles: Title[];

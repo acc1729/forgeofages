@@ -1,6 +1,6 @@
 import { Ability, AbilityDistance, AbilityType } from '../models/ability';
 import { Encounter, EncounterGroup, EncounterSlot } from '../models/encounter';
-import { Feature, FeatureAbility, FeatureAbilityCost, FeatureAbilityData, FeatureAddOn, FeatureAddOnType, FeatureAncestryChoice, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureChoice, FeatureClassAbility, FeatureClassTalent, FeatureCompanion, FeatureDamageModifier, FeatureDomain, FeatureDomainFeature, FeatureItemChoice, FeatureKit, FeatureKitType, FeatureLanguage, FeatureLanguageChoice, FeatureMalice, FeatureMultiple, FeaturePackage, FeaturePerk, FeatureSize, FeatureSkill, FeatureSkillChoice, FeatureSpeed, FeatureTalent, FeatureTalentData, FeatureText, FeatureTitleChoice } from '../models/feature';
+import { Feature, FeatureAbility, FeatureAbilityCost, FeatureAbilityData, FeatureAddOn, FeatureAddOnType, FeatureAncestryChoice, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureChoice, FeatureClassAbility, FeatureClassTalent, FeatureCompanion, FeatureDamageModifier, FeatureDomain, FeatureDomainFeature, FeatureFeat, FeatureItemChoice, FeatureKit, FeatureKitType, FeatureLanguage, FeatureLanguageChoice, FeatureMalice, FeatureMultiple, FeaturePackage, FeaturePerk, FeatureSize, FeatureSkill, FeatureSkillChoice, FeatureSpeed, FeatureTalent, FeatureTalentData, FeatureText, FeatureTitleChoice } from '../models/feature';
 import { Kit, KitDamageBonus } from '../models/kit';
 import { Monster, MonsterGroup, MonsterRole } from '../models/monster';
 import { Montage, MontageChallenge, MontageSection } from '../models/montage';
@@ -26,7 +26,7 @@ import { Hero } from '../models/hero';
 import { HeroClass } from '../models/class';
 import { Item } from '../models/item';
 import { ItemType } from '../enums/item-type';
-import { Tier } from '../enums/tier';
+import { Tier, TierLabels } from '../enums/tier';
 import { KitArmor } from '../enums/kit-armor';
 import { KitType } from '../enums/kit-type';
 import { KitWeapon } from '../enums/kit-weapon';
@@ -828,13 +828,15 @@ export class FactoryLogic {
 	};
 
 	static feature = {
-		create: (data: { id: string, name: string, description: string }): FeatureText => {
+		create: (data: { id: string, name: string, description: string, feats?: Feat[] }): FeatureText => {
 			return {
 				id: data.id,
 				name: data.name,
 				description: data.description,
 				type: FeatureType.Text,
-				data: null
+				data: {
+					feats: data.feats || [],
+				}
 			};
 		},
 		createAbility: (data: FeatureAbilityData): FeatureAbility => {
@@ -1018,6 +1020,18 @@ export class FactoryLogic {
 					level: data.level,
 					count: count,
 					selected: []
+				}
+			};
+		},
+		createFeatChoice: (data: { id: string, tier: Tier }): FeatureFeat => {
+			return {
+				id: data.id,
+				name: `${TierLabels[data.tier]} Feat`,
+				description: '',
+				type: FeatureType.Feat,
+				data: {
+					tier: data.tier,
+					selected: [],
 				}
 			};
 		},

@@ -14,6 +14,8 @@ export enum FeatureType {
 	DamageModifier = 'Damage Modifier',
 	Domain = 'Domain',
 	DomainFeature = 'Domain Feature',
+	Feat = 'Feat',
+	FeatChoice = 'Feat Choice',
 	ItemChoice = 'Item Choice',
 	Kit = 'Kit',
 	KitType = 'Kit Type',
