@@ -204,6 +204,10 @@ export const HeroPanel = (props: Props) => {
 	const getStatsSection = () => {
 		if (!props.hero.class) return null;
 		const defenses = HeroLogic.getDefenses(props.hero);
+		
+		const maxHitPoints = HeroLogic.getHitPoints(props.hero);
+		const hitPoints = maxHitPoints - props.hero.state.hitPointsLost;
+		const hitPointsSuffix = props.hero.state.hitPointsLost === 0 ? null : `/ ${maxHitPoints}`;
 
 		const sizeSmall = {
 			xs: 24,
@@ -309,13 +313,10 @@ export const HeroPanel = (props: Props) => {
 				<Col xs={sizeLarge.xs} sm={sizeLarge.sm} md={sizeLarge.md} lg={sizeLarge.lg} xl={sizeLarge.xl} xxl={sizeLarge.xxl}>
 					<div className='characteristics-box clickable' onClick={onShowHero}>
 						<div className='characteristic'>
-							<Statistic title='Placeholder' value={0} />
+							<Statistic title='Hit Points' value={hitPoints} suffix={hitPointsSuffix} />
 						</div>
 						<div className='characteristic'>
-							<Statistic title='Placeholder' value={0} />
-						</div>
-						<div className='characteristic'>
-							<Statistic title='Placeholder' value={0} />
+							<Statistic title='Recoveries' value={8} />
 						</div>
 					</div>
 				</Col>

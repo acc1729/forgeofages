@@ -604,6 +604,32 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		return value;
 	};
 
+	static getHitPoints = (hero: Hero) => {
+		if (!hero.class) return 0;
+
+		const multipliers = [
+			3, 4, 5, 6, 8, 10, 12, 16, 20, 24,
+		];
+		const bonus = HeroLogic.getCharacteristicBonus(hero, Characteristic.Constitution);
+
+		// Here's how Forge Steel does this for Stamina.
+		// TODO incorporate bonuses from talents, feats, etc. (Tough in General Feats)
+		// this.getFeatures(hero)
+		// 	.filter(f => f.type === FeatureType.Bonus)
+		// 	.map(f => f.data as FeatureBonusData)
+		// 	.filter(data => data.field === FeatureField.Stamina)
+		// 	.forEach(data => {
+		// 		value += data.value;
+		// 		value += Collections.max(data.valueCharacteristics.map(ch => HeroLogic.getCharacteristic(hero, ch)), v => v) || 0;
+		// 		if (hero.class) {
+		// 			value += data.valuePerLevel * (hero.class.level - 1);
+		// 			value += data.valuePerEchelon * HeroLogic.getEchelon(hero.class.level);
+		// 		}
+		// 	});
+
+		return (hero.class.hitPointBase + bonus) * multipliers[hero.class.level - 1];
+	};
+
 	static getRecoveryValue = (hero: Hero) => {
 		let value = Math.floor(this.getStamina(hero) / 3);
 

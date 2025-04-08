@@ -37,4 +37,5 @@ export interface HeroClass extends Element {
 		value: number;
 	}[];
 	defenses: Defenses;
+	hitPointBase: number;
 }

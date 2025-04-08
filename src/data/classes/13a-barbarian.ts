@@ -298,5 +298,6 @@ export const barbarian: HeroClass = {
 		heavyPenalty: -2,
 		physical: 11,
 		mental: 10,
-	})
+	}),
+	hitPointBase: 7,
 };

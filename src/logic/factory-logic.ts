@@ -81,6 +81,7 @@ export class FactoryLogic {
 				})
 			],
 			state: {
+				hitPointsLost: 0,
 				staminaDamage: 0,
 				staminaTemp: 0,
 				recoveriesUsed: 0,
@@ -180,6 +181,7 @@ export class FactoryLogic {
 			level: 1,
 			characteristics: [],
 			defenses: FactoryLogic.createDefenses({light: 11, heavy: 12, mental: 11, physical: 11}),
+			hitPointBase: 6,
 		};
 	};
 

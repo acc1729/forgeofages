@@ -335,4 +335,5 @@ Once per turn when you make a melee attack against an enemy, hit or miss, your a
 		physical: 11,
 		mental: 11,
 	}),
+	hitPointBase: 7,
 };
