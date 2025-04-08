@@ -442,6 +442,45 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		return Math.floor(ch / 2) - 5;
 	}
 
+	static getDefenses = (hero: Hero): {armor: number; armorWithShield: number | null; physical: number, mental: number} => {
+		if (!hero.class) {
+			return {
+				armor: 10,
+				armorWithShield: null,
+				physical: 10,
+				mental: 10,
+			}
+		}
+		const str = HeroLogic.getCharacteristicBonus(hero, Characteristic.Strength);
+		const dex = HeroLogic.getCharacteristicBonus(hero, Characteristic.Dexterity);
+		const con = HeroLogic.getCharacteristicBonus(hero, Characteristic.Constitution);
+		const int = HeroLogic.getCharacteristicBonus(hero, Characteristic.Intelligence);
+		const wis = HeroLogic.getCharacteristicBonus(hero, Characteristic.Wisdom);
+		const cha = HeroLogic.getCharacteristicBonus(hero, Characteristic.Charisma);
+		
+		const armorBonus = [dex, con, wis].sort()[1];
+		const physicalBonus = [str, dex, con].sort()[1];
+		const mentalBonus = [int, wis, cha].sort()[1];
+
+		const armorBase = hero.class.defenses.heavyPenalty ? hero.class.defenses.heavy : hero.class.defenses.light;
+		const canUseShield = hero.class.defenses.shieldPenalty === 0;
+		
+		// TODO also some logic about using a shield vs. a two hand weapon.
+		// Maybe it's fine just to show this AC + Shield and have the player know
+		// what to use.
+		
+		// TODO probably support talents and feats that modify defenses.
+ 		// HeroLogic.getFeatures(hero)
+ 		// 	.filter(f => f.type === FeatureType.DefenseModifier)
+
+ 		return {
+ 			armor: armorBase + armorBonus + hero.class.level,
+ 			armorWithShield: canUseShield ? armorBase + armorBonus + hero.class.level + 1 : null,
+ 			physical: hero.class.defenses.physical + physicalBonus + hero.class.level,
+ 			mental: hero.class.defenses.mental + mentalBonus + hero.class.level,
+ 		};
+	};
+
 	static getLanguages = (hero: Hero, sourcebooks: Sourcebook[]) => {
 		const languageNames: string[] = [];
 

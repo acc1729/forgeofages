@@ -16,6 +16,7 @@ import { Complication } from '../models/complication';
 import { Culture } from '../models/culture';
 import { DamageModifier } from '../models/damage-modifier';
 import { DamageModifierType } from '../enums/damage-modifier-type';
+import { Defenses } from '../models/defenses';
 import { Domain } from '../models/domain';
 import { Element } from '../models/element';
 import { FeatureField } from '../enums/feature-field';
@@ -111,6 +112,7 @@ export class FactoryLogic {
 			careers: [],
 			classes: [],
 			domains: [],
+			feats: [],
 			kits: [],
 			complications: [],
 			perks: [],
@@ -176,7 +178,8 @@ export class FactoryLogic {
 			abilities: [],
 			talents: [],
 			level: 1,
-			characteristics: []
+			characteristics: [],
+			defenses: FactoryLogic.createDefenses({light: 11, heavy: 12, mental: 11, physical: 11}),
 		};
 	};
 
@@ -196,6 +199,29 @@ export class FactoryLogic {
 			name: '',
 			description: '',
 			features: []
+		};
+	};
+
+	static createDefenses = (data: {
+		none?: number,
+		light: number,
+		heavy: number,
+		heavyPenalty?: number,
+		shieldPenalty?: number,
+		physical: number,
+		mental: number,
+	}): Defenses => {
+		return {
+			id: Utils.guid(),
+			name: '',
+			description: '',
+			none: data.none || 10,
+			light: data.light,
+			heavy: data.heavy,
+			heavyPenalty: data.heavyPenalty === undefined ? 0 : data.heavyPenalty,
+			shieldPenalty: data.shieldPenalty === undefined ? 0 : data.shieldPenalty,
+			physical: data.physical,
+			mental: data.mental,
 		};
 	};
 

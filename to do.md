@@ -3,7 +3,9 @@
 ### Architecture / Modeling
 
 * Figure out powers
-* Figure out defenses
+* Maybe ponder defense modelling a bit more
+* Figure out defense //bonuses// from feats and etc.
+* Figure out recoveries
 * Figure out attacks
 * Figure out ASIs at 4th, 7th, and 10th level.
 

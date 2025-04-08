@@ -328,5 +328,11 @@ Once per turn when you make a melee attack against an enemy, hit or miss, your a
 	],
 	abilities: [],
 	level: 1,
-	characteristics: []
+	characteristics: [],
+	defenses: FactoryLogic.createDefenses({
+		light: 12,
+		heavy: 14,
+		physical: 11,
+		mental: 11,
+	}),
 };

@@ -6,7 +6,7 @@ import { HeroClass } from '../../models/class';
 export const barbarian: HeroClass = {
 	id: 'class-barbarian',
 	name: 'Barbarian',
-	description: `Fill this in later I guess.`,
+	description: `Strong guy with big biceps who gets mad and punches hard.`,
 	primaryCharacteristics: [Characteristic.Strength, Characteristic.Constitution],
 	featuresByLevel: [
 		{
@@ -291,5 +291,12 @@ export const barbarian: HeroClass = {
 	],
 	abilities: [],
 	level: 1,
-	characteristics: []
+	characteristics: [],
+	defenses: FactoryLogic.createDefenses({
+		light: 12,
+		heavy: 13,
+		heavyPenalty: -2,
+		physical: 11,
+		mental: 10,
+	})
 };

@@ -203,6 +203,7 @@ export const HeroPanel = (props: Props) => {
 
 	const getStatsSection = () => {
 		if (!props.hero.class) return null;
+		const defenses = HeroLogic.getDefenses(props.hero);
 
 		const sizeSmall = {
 			xs: 24,
@@ -315,6 +316,24 @@ export const HeroPanel = (props: Props) => {
 						</div>
 						<div className='characteristic'>
 							<Statistic title='Placeholder' value={0} />
+						</div>
+					</div>
+				</Col>
+				<Col xs={sizeLarge.xs} sm={sizeLarge.sm} md={sizeLarge.md} lg={sizeLarge.lg} xl={sizeLarge.xl} xxl={sizeLarge.xxl}>
+					<div className='characteristics-box clickable' onClick={onShowHero}>
+						<div className='characteristic'>
+							<Statistic title='Armor Class' value={defenses.armor} />
+						</div>
+						{defenses.armorWithShield !== null ?
+							<div className='characteristic'>
+								<Statistic title='AC with Shield' value={defenses.armorWithShield} />
+							</div>
+						 : null}
+						<div className='characteristic'>
+							<Statistic title='Physical Defense' value={defenses.physical} />
+						</div>
+						<div className='characteristic'>
+							<Statistic title='Mental Defense' value={defenses.mental} />
 						</div>
 					</div>
 				</Col>
