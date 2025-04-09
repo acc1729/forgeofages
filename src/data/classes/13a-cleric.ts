@@ -1,4 +1,5 @@
 import { Characteristic } from '../../enums/characteristic';
+import { Dice } from '../../enums/dice';
 import { Tier } from '../../enums/tier';
 import { FactoryLogic } from '../../logic/factory-logic';
 import { HeroClass } from '../../models/class';
@@ -329,6 +330,22 @@ Once per turn when you make a melee attack against an enemy, hit or miss, your a
 	abilities: [],
 	level: 1,
 	characteristics: [],
+	basicAttacks: {
+		oneHanded: FactoryLogic.createBasicAttack({
+			dice: Dice.D6,
+			hitBonus: [Characteristic.Strength],
+			missDamage: true,
+		}),
+		twoHanded: FactoryLogic.createBasicAttack({
+			dice: Dice.D8,
+			hitBonus: [Characteristic.Strength],
+			missDamage: true,
+		}),
+		ranged: FactoryLogic.createBasicAttack({
+			dice: Dice.D6,
+			hitBonus: [Characteristic.Dexterity],
+		}),
+	},
 	defenses: FactoryLogic.createDefenses({
 		light: 12,
 		heavy: 14,

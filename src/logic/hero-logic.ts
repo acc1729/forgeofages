@@ -2,9 +2,12 @@ import { Ability, AbilityDistance } from '../models/ability';
 import { Feature, FeatureAbilityData, FeatureBonusData, FeatureClassAbilityData, FeatureClassTalentData, FeatureDamageModifierData, FeatureDomainData, FeatureItemChoice, FeatureKitData, FeatureKitTypeData, FeatureLanguageChoiceData, FeatureLanguageData, FeatureSkillChoiceData, FeatureSkillData } from '../models/feature';
 import { AbilityDistanceType } from '../enums/abiity-distance-type';
 import { AbilityKeyword } from '../enums/ability-keyword';
+import { BasicAttack } from '../models/class';
 import { Characteristic } from '../enums/characteristic';
 import { Collections } from '../utils/collections';
+import { DamageRoll } from '../models/damage-roll';
 import { DamageModifierType } from '../enums/damage-modifier-type';
+import { Dice } from '../enums/dice';
 import { Domain } from '../models/domain';
 import { FactoryLogic } from './factory-logic';
 import { Feat } from '../models/feat';
@@ -53,6 +56,7 @@ export class HeroLogic {
 
 		return kits;
 	};
+
 
 	static getDomains = (hero: Hero) => {
 		const domains: Domain[] = [];
@@ -442,6 +446,43 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		return Math.floor(ch / 2) - 5;
 	}
 
+	static getBasicAttackHitBonus = (hero: Hero, attackType: 'oneHanded' | 'twoHanded' | 'ranged'): number => {
+		if (!hero.class) {
+			return 0;
+		}
+
+		const basicAttack: BasicAttack = hero.class.basicAttacks[attackType];
+		const highestApplicableCharacteristic = basicAttack.hitBonus
+			.map(ch => HeroLogic.getCharacteristicBonus(hero, ch))
+			.reduce((acc, el) => el >= acc ? el : acc);
+
+		return hero.class.level + highestApplicableCharacteristic;
+	}
+
+	static getBasicAttackDamageRoll = (hero: Hero, attackType: 'oneHanded' | 'twoHanded' | 'ranged'): DamageRoll => {
+		if (!hero.class) {
+			return {
+				dice: Dice.D4,
+				numberOfDice: 1,
+				multiplier: 1,
+				bonus: 0,
+			}
+		}
+
+		const basicAttack: BasicAttack = hero.class.basicAttacks[attackType];
+		const bonusMultiplier = hero.class.level <= 4 ? 1 : hero.class.level <= 7 ? 2 : 3;
+		const highestApplicableCharacteristic = basicAttack.damageBonus
+			.map(ch => HeroLogic.getCharacteristicBonus(hero, ch))
+			.reduce((acc, el) => el >= acc ? el : acc);
+
+		return {
+			dice: basicAttack.dice,
+			numberOfDice: hero.class.level,
+			multiplier: 1,
+			bonus: highestApplicableCharacteristic * bonusMultiplier,
+		}
+	}
+
 	static getDefenses = (hero: Hero): {armor: number; armorWithShield: number | null; physical: number, mental: number} => {
 		if (!hero.class) {
 			return {
@@ -458,12 +499,13 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		const wis = HeroLogic.getCharacteristicBonus(hero, Characteristic.Wisdom);
 		const cha = HeroLogic.getCharacteristicBonus(hero, Characteristic.Charisma);
 		
-		const armorBonus = [dex, con, wis].sort()[1];
-		const physicalBonus = [str, dex, con].sort()[1];
+		const armorBonus = [con, dex, wis].sort()[1];
+		const physicalBonus = [str, con, dex].sort()[1];
 		const mentalBonus = [int, wis, cha].sort()[1];
 
-		const armorBase = hero.class.defenses.heavyPenalty ? hero.class.defenses.heavy : hero.class.defenses.light;
+		const armorBase = hero.class.defenses.heavyPenalty === 0 ? hero.class.defenses.heavy : hero.class.defenses.light;
 		const canUseShield = hero.class.defenses.shieldPenalty === 0;
+		
 		
 		// TODO also some logic about using a shield vs. a two hand weapon.
 		// Maybe it's fine just to show this AC + Shield and have the player know

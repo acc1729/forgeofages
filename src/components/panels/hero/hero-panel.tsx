@@ -338,6 +338,19 @@ export const HeroPanel = (props: Props) => {
 						</div>
 					</div>
 				</Col>
+				<Col xs={sizeLarge.xs} sm={sizeLarge.sm} md={sizeLarge.md} lg={sizeLarge.lg} xl={sizeLarge.xl} xxl={sizeLarge.xxl}>
+					<div className='characteristics-box clickable' onClick={onShowHero}>
+						<div className='characteristic'>
+							<Statistic title='Melee Attack (1H)' value={FormatLogic.getHitBonus(HeroLogic.getBasicAttackHitBonus(props.hero, "oneHanded"))} suffix={FormatLogic.getDamageRoll(HeroLogic.getBasicAttackDamageRoll(props.hero, "oneHanded"))} />
+						</div>
+						<div className='characteristic'>
+							<Statistic title='Melee Attack (2H)' value={FormatLogic.getHitBonus(HeroLogic.getBasicAttackHitBonus(props.hero, "twoHanded"))} suffix={FormatLogic.getDamageRoll(HeroLogic.getBasicAttackDamageRoll(props.hero, "twoHanded"))} />
+						</div>
+						<div className='characteristic'>
+							<Statistic title='Ranged' value={FormatLogic.getHitBonus(HeroLogic.getBasicAttackHitBonus(props.hero, "ranged"))} suffix={FormatLogic.getDamageRoll(HeroLogic.getBasicAttackDamageRoll(props.hero, "ranged"))} />
+						</div>
+					</div>
+				</Col>
 			</Row>
 		);
 	};

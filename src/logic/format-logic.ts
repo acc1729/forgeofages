@@ -1,6 +1,8 @@
 import { DamageModifier, Modifier } from '../models/damage-modifier';
 import { Plot, PlotLink } from '../models/plot';
 import { AbilityType } from '../models/ability';
+import { DamageRoll } from '../models/damage-roll';
+import { Dice } from '../enums/dice';
 import { AbilityUsage } from '../enums/ability-usage';
 import { Size } from '../models/size';
 
@@ -21,6 +23,29 @@ export class FormatLogic {
 		if (bonus < 0) return `${bonus}`;
 		return '-';
 	};
+	
+	static getHitBonus = (bonus: number): string => {
+		if (bonus >= 0) return `+${bonus}`;
+		else return `${bonus}`;
+	};
+
+	static getDamageRoll = (damageRoll: DamageRoll): string => {
+		const multiplierFragment = damageRoll.multiplier === 1 ? '' : ` x ${damageRoll.multiplier}`;
+		const bonusFragment = damageRoll.bonus === 1 ? '' : ` + ${damageRoll.bonus}`;
+
+		return `${damageRoll.numberOfDice}${FormatLogic.getDice(damageRoll.dice)}${multiplierFragment}${bonusFragment}`
+	}
+	
+	static getDice = (dice: Dice): string => {
+		return {
+			[Dice.D4]: "d4",
+			[Dice.D6]: "d6",
+			[Dice.D8]: "d8",
+			[Dice.D10]: "d10",
+			[Dice.D12]: "d12",
+			[Dice.D20]: "d20",
+		}[dice];
+	}
 	
 	static getSize = (size: Size) => {
 		if (size.value > 1) {

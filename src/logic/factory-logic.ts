@@ -16,7 +16,7 @@ import { Complication } from '../models/complication';
 import { Culture } from '../models/culture';
 import { DamageModifier } from '../models/damage-modifier';
 import { DamageModifierType } from '../enums/damage-modifier-type';
-import { Defenses } from '../models/defenses';
+import { Dice } from '../enums/dice';
 import { Domain } from '../models/domain';
 import { Element } from '../models/element';
 import { FeatureField } from '../enums/feature-field';
@@ -24,7 +24,7 @@ import { FeatureType } from '../enums/feature-type';
 import { Format } from '../utils/format';
 import { FormatLogic } from './format-logic';
 import { Hero } from '../models/hero';
-import { HeroClass } from '../models/class';
+import { HeroClass, Defenses, BasicAttack, BasicAttacks } from '../models/class';
 import { Item } from '../models/item';
 import { ItemType } from '../enums/item-type';
 import { Tier, TierLabels } from '../enums/tier';
@@ -144,6 +144,21 @@ export class FactoryLogic {
 		};
 	};
 
+	static createBasicAttack = (data: {
+		dice?: Dice,
+		hitBonus?: Characteristic[],
+		damageBonus?: Characteristic[],
+		missDamage?: boolean,
+	}): BasicAttack => {
+		const hitBonus = data.hitBonus || [Characteristic.Strength];
+		return {
+			dice: data.dice || Dice.D4,
+			hitBonus: hitBonus,
+			damageBonus: data.damageBonus || hitBonus,
+			missDamage: data.missDamage === undefined ? false : data.missDamage,			
+		};
+	};
+
 	static createCulture = (name?: string, description?: string, languages?: string[], environment?: Feature, organization?: Feature, upbringing?: Feature): Culture => {
 		return {
 			id: name ? `culture-${name.replace(' ', '-').toLowerCase()}` : Utils.guid(),
@@ -180,6 +195,11 @@ export class FactoryLogic {
 			talents: [],
 			level: 1,
 			characteristics: [],
+			basicAttacks: {
+				oneHanded: FactoryLogic.createBasicAttack({}),
+				twoHanded: FactoryLogic.createBasicAttack({}),
+				ranged: FactoryLogic.createBasicAttack({}),
+			},
 			defenses: FactoryLogic.createDefenses({light: 11, heavy: 12, mental: 11, physical: 11}),
 			hitPointBase: 6,
 		};
@@ -214,9 +234,6 @@ export class FactoryLogic {
 		mental: number,
 	}): Defenses => {
 		return {
-			id: Utils.guid(),
-			name: '',
-			description: '',
 			none: data.none || 10,
 			light: data.light,
 			heavy: data.heavy,
