@@ -86,7 +86,7 @@ export class HeroLogic {
 			.flatMap(f => f.feats)
 			.forEach(f => feats.push(f));
 
-		if (tier) {
+		if (tier !== undefined) {
 			feats = feats.filter(f => f.tier === tier)
 		}
 
