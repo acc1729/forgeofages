@@ -72,12 +72,19 @@ export class HeroLogic {
 		return domains;
 	};
 
+	static getSelectedFeats = (hero: Hero): Feat[] => {
+		return this.getFeatures(hero)
+			.filter(f => f.type === FeatureType.Feat)
+			.flatMap(f => f.data.selected);
+	}
+	
 	static getAvailableFeats = (hero: Hero, sourcebooks: Sourcebook[], tier?: Tier): Feat[] => {
 		let feats: Feat[] = [];
 		sourcebooks.flatMap(sb => sb.feats).forEach(f => feats.push(f));
 
 		const heroFeatures = HeroLogic.getFeatures(hero);
 		const heroTalents = HeroLogic.getTalents(hero);
+		// TODO get hero powers too
 		heroFeatures
 			.filter(f => f.type === FeatureType.Text)
 			.flatMap(f => f.data.feats)
@@ -89,6 +96,9 @@ export class HeroLogic {
 		if (tier !== undefined) {
 			feats = feats.filter(f => f.tier === tier)
 		}
+
+		const selectedFeats = this.getSelectedFeats(hero).flatMap(f => f.id);
+		feats = feats.filter(f => !selectedFeats.includes(f.id));
 
 		return Collections.distinct(feats, a => a.name);
 	};

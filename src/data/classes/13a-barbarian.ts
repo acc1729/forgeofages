@@ -55,6 +55,99 @@ export const barbarian: HeroClass = {
 				})
 			]
 		},
+		{
+			level: 2,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-2',
+					tier: Tier.Adventurer,
+				}),
+			]
+		},
+		{
+			level: 3,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-3',
+					tier: Tier.Adventurer,
+				}),
+			]
+		},
+		{
+			level: 4,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-4',
+					tier: Tier.Adventurer,
+				}),
+			]
+		},
+		{
+			level: 5,
+			features: [
+				FactoryLogic.feature.createClassTalentChoice({
+					id: 'barbarian-talent-2',
+					name: 'Barbarian Talents',
+					description: "Choose a new Barbarian talent, including Champion talent choices.",
+					tier: Tier.Champion,
+				}),
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-5',
+					tier: Tier.Champion,
+				}),
+			]
+		},
+		{
+			level: 6,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-6',
+					tier: Tier.Champion,
+				}),
+			]
+		},
+		{
+			level: 7,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-7',
+					tier: Tier.Champion,
+				}),
+			]
+		},
+		{
+			level: 8,
+			features: [
+				FactoryLogic.feature.createClassTalentChoice({
+					id: 'barbarian-talent-3',
+					name: 'Barbarian Talents',
+					description: "Choose a new Barbarian talent, including Epic talent choices.",
+					tier: Tier.Epic,
+				}),
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-8',
+					tier: Tier.Epic,
+				}),
+			]
+		},
+		{
+			level: 9,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-9',
+					tier: Tier.Epic,
+				}),
+			]
+		},
+		{
+			level: 10,
+			features: [
+				FactoryLogic.feature.createFeatChoice({
+					id: 'barbarian-feat-10',
+					tier: Tier.Epic,
+				}),
+			]
+		},
 	],
 	talents: [
 		FactoryLogic.createTalent({

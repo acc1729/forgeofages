@@ -1328,8 +1328,9 @@ export const FeaturePanel = (props: Props) => {
 				</Space>
 			);
 		} else {
+			const article = data.tier === Tier.Champion ? "a" : "an";
 			return (
-				<div className='ds-text'>Choose a(n) {TierLabels[data.tier]} feat.</div>
+				<div className='ds-text'>Choose {article} {TierLabels[data.tier]} feat.</div>
 			);
 		}
 	};
