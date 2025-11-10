@@ -437,11 +437,12 @@ const ClassSection = (props: ClassSectionProps) => {
 	if (props.hero.class) {
 		const cls = props.hero.class;
 		const str = cls.characteristics
-			.filter(ch => !cls.primaryCharacteristics.includes(ch.characteristic))
+			// .filter(ch => !cls.primaryCharacteristics.includes(ch.characteristic))
 			.map(ch => ch.value)
 			.join(', ');
 		currentArray = HeroLogic.getCharacteristicArrays()
 			.find(arr => Collections.getPermutations(arr).map(a => a.join(', ')).includes(str)) || null;
+		if (currentArray !== null) currentArray = Collections.sortNumeric(currentArray, a => a).reverse();
 	}
 	const [ array, setArray ] = useState<number[] | null>(currentArray);
 
@@ -502,13 +503,19 @@ const ClassSection = (props: ClassSectionProps) => {
 								>
 									<Space direction='vertical' style={{ width: '100%' }}>
 										{
-											HeroLogic.calculateCharacteristicArrays(array, props.hero.class.primaryCharacteristics).map((array, n1) => (
-												<Radio.Button key={n1} value={JSON.stringify(array)} style={{ width: '100%' }}>
+											HeroLogic.calculateCharacteristicArrays(array, props.hero.class.primaryCharacteristics).map((array, n1) => {
+												let checked = true;
+												for (let k = 0; k < array.len; k++) {
+													if (array[k]["value"] !== props.hero.class.characteristics[k]["value"]) checked = false;
+												}
+
+												return (
+												<Radio.Button key={n1} value={JSON.stringify(array)} style={{ width: '100%' }} checked={checked}>
 													<div className='characteristic-row'>
 														{array.map((ch, n2) => <div key={n2} className='characteristic-item'>{ch.value}</div>)}
 													</div>
 												</Radio.Button>
-											))
+											)})
 										}
 									</Space>
 								</Radio.Group>

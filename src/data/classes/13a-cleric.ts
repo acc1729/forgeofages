@@ -58,7 +58,11 @@ There are certain abilities specific to the cleric that can affect their powers:
 					description: "Choose three Cleric talents/domains. Each talent/domain provides an ability that can be improved by feats. It also provides an invocation you can use as a quick action once per day, per battle, per party.",
 					count: 3,
 					tier: Tier.Adventurer,
-				})
+				}),
+				FactoryLogic.feature.createFeatChoice({
+					id: 'cleric-feat-1',
+					tier: Tier.Adventurer,
+				}),
 			]
 		},
 	],

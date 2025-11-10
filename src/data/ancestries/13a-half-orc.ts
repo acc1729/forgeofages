@@ -17,7 +17,7 @@ export const halfOrc: Ancestry = {
 					tier: Tier.Champion,
 					id: 'half-orc-feat-c',
 					name: "Lethal",
-					description: 'If the <i>lethal</i> attack reroll is a natural 16+, you can use <i>lethal</i> again later this battle.'
+					description: 'If the *lethal* attack reroll is a natural 16+, you can use *lethal* again later this battle.'
 				}
 			]
 		}),
