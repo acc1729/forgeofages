@@ -17,7 +17,7 @@ export const dwarf: Ancestry = {
 					tier: Tier.Champion,
 					id: 'dwarf-feat-c',
 					name: "That's your best shot?",
-					description: 'When your ranged attack targets an enemy who is engaged with an ally, you have no chance of hitting that ally.'
+					description: 'If the escalation die is 2+ when you use <i>that\'s your best shot,</i> the recovery is free.'
 				}
 			]
 		}),

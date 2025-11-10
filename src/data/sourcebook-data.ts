@@ -22,6 +22,7 @@ export class SourcebookData {
 		ancestries: [
 			AncestryData.human,
 			AncestryData.dwarf,
+			AncestryData.halfOrc,
 		],
 		cultures: [
 			FactoryLogic.createCulture('Artisan Guild', 'Urban, bureaucratic, creative.', [], EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.creative),

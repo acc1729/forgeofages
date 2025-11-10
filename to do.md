@@ -17,4 +17,5 @@
 
 * Validate Hero Backgrounds point spend, background-feats
 * Validate Icon Relationships point spend
+* Validate Kin and Class ASI don't overlap
 
