@@ -505,7 +505,7 @@ const ClassSection = (props: ClassSectionProps) => {
 										{
 											HeroLogic.calculateCharacteristicArrays(array, props.hero.class.primaryCharacteristics).map((array, n1) => {
 												let checked = true;
-												for (let k = 0; k < array.len; k++) {
+												for (let k = 0; k < array.length; k++) {
 													if (array[k]["value"] !== props.hero.class.characteristics[k]["value"]) checked = false;
 												}
 

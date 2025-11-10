@@ -1645,12 +1645,21 @@ export const FeaturePanel = (props: Props) => {
 			}
 		}
 
+		let applicableFeats = [];
+		if (props.feature.feats !== undefined) {
+			const selectedFeatIds = HeroLogic.getSelectedFeats(props.hero).flatMap(f => f.id);
+			applicableFeats = props.feature.feats.filter(f => selectedFeatIds.includes(f.id));
+		}
+		
 		return (
 			<div className={props.mode === PanelMode.Full ? 'feature-panel' : 'feature-panel compact'} id={props.mode === PanelMode.Full ? props.feature.id : undefined}>
 				<HeaderText ribbon={props.cost === 'signature' ? <Badge>Signature</Badge> : props.cost ? <HeroicResourceBadge value={props.cost} repeatable={props.repeatable} /> : null} tags={tags}>
 					{props.feature.name}
 				</HeaderText>
 				<Markdown text={props.feature.description} />
+				{applicableFeats.map((f, i) => (
+					<Markdown key={f.id} text={`*${TierLabels[f.tier]} Feat:* ${f.description}`} />
+				))}				
 				{
 					props.mode === PanelMode.Full
 						? (props.setData ? getSelection() : getInformation())

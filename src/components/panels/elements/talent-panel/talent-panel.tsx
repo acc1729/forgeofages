@@ -5,7 +5,7 @@ import { Markdown } from '../../../controls/markdown/markdown';
 import { Options } from '../../../../models/options';
 import { PanelMode } from '../../../../enums/panel-mode';
 import { Talent } from '../../../../models/talent';
-import { TierAbbreviations } from '../../../../enums/tier';
+import { TierLabels } from '../../../../enums/tier';
 import { Feat } from '../../../../models/feat';
 
 import './talent-panel.scss';
@@ -29,12 +29,11 @@ function renderFeats(feats: Feat[]) {
 			<HeaderText level={3}>Feats</HeaderText>
 			{feats.map((feat, i) => (
 					<p key={i}>
-						<Markdown text={`**${TierAbbreviations[feat.tier]}:** ${feat.description}`} />
+						<Markdown text={`*${TierLabels[feat.tier]} Feat:* ${feat.description}`} />
 					</p>
 				))}
 		</div>
 	);
-
 }
 
 export const TalentPanel = (props: Props) => {
@@ -43,8 +42,6 @@ export const TalentPanel = (props: Props) => {
 		if (props.mode !== PanelMode.Full) {
 			className += ' compact';
 		}
-
-		console.log(props);
 
 		return (
 			<div className={className} id={props.mode === PanelMode.Full ? props.talent.id : undefined}>
