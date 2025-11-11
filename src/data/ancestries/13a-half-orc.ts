@@ -22,8 +22,8 @@ export const halfOrc: Ancestry = {
 			]
 		}),
 		FactoryLogic.feature.createChoice({
-			id: 'half-orc-feature-2',
-			name: 'Ability Score Increase',
+			id: 'half-orc-characteristic-bonus',
+			name: 'Half Orc Characteristic Bonus',
 			options: [
 				{
 					feature: FactoryLogic.feature.createCharacteristicBonus({
