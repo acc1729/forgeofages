@@ -30,7 +30,7 @@ export const halfOrc: Ancestry = {
 						id: 'half-orc-asi-str',
 						characteristic: Characteristic.Strength,
 						value: 2,
-
+						exclusive: true,
 					}),
 					value: 1,
 				},
@@ -39,7 +39,7 @@ export const halfOrc: Ancestry = {
 						id: 'half-orc-asi-dex',
 						characteristic: Characteristic.Dexterity,
 						value: 2,
-
+						exclusive: true,
 					}),
 					value: 1,
 				},

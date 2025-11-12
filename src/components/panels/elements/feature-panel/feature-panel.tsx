@@ -200,15 +200,16 @@ export const FeaturePanel = (props: Props) => {
 			showCosts = true;
 		}
 
-		// For 13th Age, you can't take the same CharacteristicBonus twice.
-		// TODO: Maybe this plays poorly with the eventual ASI work.
- 		const takenCharacteristicBonuses = HeroLogic.getFeatures(props.hero)
+		// Can't take the same CharacteristicBonus twice from Kin and Class.
+ 		const takenExclusiveCharacteristicBonuses = HeroLogic.getFeatures(props.hero)
  			.filter(f => f.type === FeatureType.CharacteristicBonus)
+ 			.filter(f => f.data.exclusive)
  			.flatMap(f => f.data.characteristic);
-		const alreadyTakenOptions = availableOptions
+		const excludedOptions = availableOptions
 			.filter(opt => opt.feature.type === FeatureType.CharacteristicBonus)
-			.filter(opt => takenCharacteristicBonuses.includes(opt.feature.data.characteristic))
-		unavailableIDs = unavailableIDs.concat(alreadyTakenOptions.map(opt => opt.feature.id));
+			.filter(opt => opt.feature.data.exclusive)
+			.filter(opt => takenExclusiveCharacteristicBonuses.includes(opt.feature.data.characteristic))
+		unavailableIDs = unavailableIDs.concat(excludedOptions.map(opt => opt.feature.id));
 
 		return (
 			<Space direction='vertical' style={{ width: '100%' }}>

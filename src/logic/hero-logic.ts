@@ -951,16 +951,11 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		return Tier.Epic;
 	};
 
+	// 13th Age 2e recommends only the following two arrays.
 	static getCharacteristicArrays = (): number[][] => {
 		return [
-			[18, 16, 10, 8, 8, 8],
-			[18, 15, 10, 10, 8, 8],
-			[18, 14, 12, 10, 8, 8],
-			[18, 14, 10, 10, 10, 8],
-			[18, 13, 12, 10, 9, 8],
-			[18, 12, 10, 10, 10, 10],
-			[17, 17, 10, 8, 8, 8],
-			// TODO add the other two thirds of appendix B, p.309
+			[17, 15, 14, 13, 12, 10],
+			[15, 15, 15, 14, 14, 12],
 		];
 	};
 
@@ -978,7 +973,7 @@ Complex or time-consuming tests might require an action if made in combat - or c
 		}).filter((arr) => {
 			for (let ch of primary) {
 				let value = arr[all.indexOf(ch)].value;
-				if (!array.slice(0, 3).includes(value)) {
+				if (!array.slice(0, 2).includes(value)) {
 					return false;
 				};
 			}

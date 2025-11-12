@@ -74,6 +74,7 @@ export type FeatureBonus = FeatureOf<FeatureType.Bonus, FeatureBonusData>;
 export interface FeatureCharacteristicBonusData extends _FeatureData {
 	characteristic: Characteristic;
 	value: number;
+	exclusive: boolean;
 };
 export type FeatureCharacteristicBonus = FeatureOf<FeatureType.CharacteristicBonus, FeatureCharacteristicBonusData>;
 

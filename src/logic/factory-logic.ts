@@ -962,7 +962,26 @@ export class FactoryLogic {
 				}
 			};
 		},
-		createCharacteristicBonus: (data: { id: string, name?: string, description?: string, characteristic: Characteristic, value: number }): FeatureCharacteristicBonus => {
+
+		createLevelCharacteristicBonus: (data: {id: string, count: number, name?:  string, description?: string}): FeatureChoice => {
+
+			const options = [
+					FactoryLogic.feature.createCharacteristicBonus({id: data.id + "-str", characteristic: Characteristic.Strength, value: 1}),
+					FactoryLogic.feature.createCharacteristicBonus({id: data.id + "-con", characteristic: Characteristic.Constitution, value: 1}),
+					FactoryLogic.feature.createCharacteristicBonus({id: data.id + "-dex", characteristic: Characteristic.Dexterity, value: 1}),
+					FactoryLogic.feature.createCharacteristicBonus({id: data.id + "-int", characteristic: Characteristic.Intelligence, value: 1}),
+					FactoryLogic.feature.createCharacteristicBonus({id: data.id + "-wis", characteristic: Characteristic.Wisdom, value: 1}),
+					FactoryLogic.feature.createCharacteristicBonus({id: data.id + "-cha", characteristic: Characteristic.Charisma, value: 1}),
+			];
+			return FactoryLogic.feature.createChoice({
+				id: data.id,
+				name: "Ability Score Bonus",
+				description: data.description,
+				options: options.map(f => ({feature: f, value: 1})),
+				count: data.count,
+			});
+		},
+		createCharacteristicBonus: (data: { id: string, name?: string, description?: string, characteristic: Characteristic, value: number, exclusive?: boolean }): FeatureCharacteristicBonus => {
 			return {
 				id: data.id,
 				name: data.name || data.characteristic.toString(),
@@ -970,7 +989,8 @@ export class FactoryLogic {
 				type: FeatureType.CharacteristicBonus,
 				data: {
 					characteristic: data.characteristic,
-					value: data.value
+					value: data.value,
+					exclusive: data.exclusive !== undefined ? data.exclusive : false,
 				}
 			};
 		},

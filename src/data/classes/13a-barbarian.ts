@@ -29,6 +29,7 @@ export const barbarian: HeroClass = {
 								id: 'barbarian-bonus-str',
 								characteristic: Characteristic.Strength,
 								value: 2,
+								exclusive: true,
 							}),
 							value: 1,
 						},
@@ -37,6 +38,7 @@ export const barbarian: HeroClass = {
 								id: 'barbarian-bonus-con',
 								characteristic: Characteristic.Constitution,
 								value: 2,
+								exclusive: true,
 							}),
 							value: 1,
 						},
@@ -76,6 +78,10 @@ export const barbarian: HeroClass = {
 		{
 			level: 4,
 			features: [
+				FactoryLogic.feature.createLevelCharacteristicBonus({
+					id: 'barbarian-ability-bonus-4',
+					count: 3,
+				}),
 				FactoryLogic.feature.createFeatChoice({
 					id: 'barbarian-feat-4',
 					tier: Tier.Adventurer,
@@ -109,6 +115,10 @@ export const barbarian: HeroClass = {
 		{
 			level: 7,
 			features: [
+				FactoryLogic.feature.createLevelCharacteristicBonus({
+					id: 'barbarian-ability-bonus-7',
+					count: 4,
+				}),
 				FactoryLogic.feature.createFeatChoice({
 					id: 'barbarian-feat-7',
 					tier: Tier.Champion,
@@ -142,6 +152,10 @@ export const barbarian: HeroClass = {
 		{
 			level: 10,
 			features: [
+				FactoryLogic.feature.createLevelCharacteristicBonus({
+					id: 'barbarian-ability-bonus-10',
+					count: 5,
+				}),
 				FactoryLogic.feature.createFeatChoice({
 					id: 'barbarian-feat-10',
 					tier: Tier.Epic,
